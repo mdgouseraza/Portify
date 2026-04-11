@@ -4,3 +4,4 @@ werkzeug
 reportlab
 qrcode[pil]
 PyPDF2
+gunicorn
