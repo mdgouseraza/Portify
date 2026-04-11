@@ -1,0 +1,6 @@
+flask
+flask-sqlalchemy
+werkzeug
+reportlab
+qrcode[pil]
+PyPDF2
