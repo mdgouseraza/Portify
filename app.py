@@ -22,7 +22,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 ALLOWED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "prooffolio-secret-key-2024"
+app.config["SECRET_KEY"] = "prooffolio-secret-key-2026"
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"sqlite:///{os.path.join(BASE_DIR, 'prooffolio.db')}"
 )
@@ -195,12 +195,24 @@ def index():
                 doc_path = os.path.join(UPLOAD_DIR, f"{usn}_{orig_name}")
                 uploaded_file.save(doc_path)
 
+        # Handle mandatory profile picture upload
+        pic_path = None
+        profile_pic = request.files.get("profile_pic")
+        if profile_pic and profile_pic.filename:
+            orig_name = secure_filename(profile_pic.filename)
+            ext = os.path.splitext(orig_name)[1].lower()
+            if ext in {".jpg", ".jpeg", ".png"}:
+                pic_path = os.path.join(UPLOAD_DIR, f"{usn}_pic{ext}")
+                profile_pic.save(pic_path)
+
         # Generate PDF and send as download
         try:
-            pdf_bytes = generate_pdf(student, document_path=doc_path)
+            pdf_bytes = generate_pdf(student, document_path=doc_path, profile_pic_path=pic_path)
         finally:
             if doc_path and os.path.exists(doc_path):
                 os.remove(doc_path)
+            if pic_path and os.path.exists(pic_path):
+                os.remove(pic_path)
 
         return send_file(
             io.BytesIO(pdf_bytes),

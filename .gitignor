@@ -1,6 +1,6 @@
 .venv/
 __pycache__/
 *.pyc
-portify.db
+prooffolio.db
 uploads/
 *.DS_Store

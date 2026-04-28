@@ -1,6 +1,6 @@
 # ProofFolio 🎓
 
-ProofFolio is a full-stack Python web application designed to help university students effortlessly build and download a professional academic portfolio and resume in seconds. Built specifically as a Project-Based Learning (PBL) submission, it merges a rich web interface with dynamic PDF generation.
+ProofFolio is a full-stack Python web application designed to help university students effortlessly build and download a professional academic portfolio and resume in seconds.
 
 ## ✨ Features and Capabilities
 

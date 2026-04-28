@@ -11,7 +11,7 @@ from reportlab.lib.units import mm
 from reportlab.lib.utils import ImageReader
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, HRFlowable,
-    PageBreak, Table, TableStyle, KeepTogether,
+    PageBreak, Table, TableStyle, KeepTogether, Flowable,
 )
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from PyPDF2 import PdfReader, PdfWriter
@@ -54,11 +54,11 @@ def _make_styles():
     S["r_name"] = ParagraphStyle(
         "r_name",
         fontName="Helvetica-Bold",
-        fontSize=20,
-        leading=24,
-        textColor=colors.black,
-        spaceAfter=2,
-        alignment=TA_LEFT,
+        fontSize=22,
+        leading=26,
+        textColor=colors.HexColor("#000000"),
+        spaceAfter=4,
+        alignment=TA_CENTER,
     )
     S["r_contact"] = ParagraphStyle(
         "r_contact",
@@ -66,45 +66,39 @@ def _make_styles():
         fontSize=9,
         leading=11,
         textColor=colors.HexColor("#444444"),
-        spaceAfter=1,
-        alignment=TA_LEFT,
-    )
-    S["r_contact_right"] = ParagraphStyle(
-        "r_contact_right",
-        fontName="Helvetica",
-        fontSize=9,
-        leading=11,
-        textColor=colors.HexColor("#1565C0"),
-        spaceAfter=1,
-        alignment=TA_RIGHT,
+        spaceAfter=10,
+        alignment=TA_CENTER,
     )
     S["r_section"] = ParagraphStyle(
         "r_section",
-        fontName="Helvetica-BoldOblique",
-        fontSize=10,
-        textColor=colors.HexColor("#444444"),
+        fontName="Helvetica-Bold",
+        fontSize=11,
+        textColor=colors.HexColor("#1565C0"),
         leading=14,
+        spaceBefore=8,
+        spaceAfter=2,
+        textTransform="uppercase",
     )
     S["r_body"] = ParagraphStyle(
         "r_body",
         fontName="Helvetica",
-        fontSize=9.5,
+        fontSize=10,
         textColor=colors.black,
-        spaceAfter=2,
-        leading=13,
+        spaceAfter=3,
+        leading=14,
     )
     S["r_bold"] = ParagraphStyle(
         "r_bold",
         fontName="Helvetica-Bold",
-        fontSize=9.5,
+        fontSize=10,
         textColor=colors.black,
         spaceAfter=1,
-        leading=13,
+        leading=14,
     )
     S["r_muted"] = ParagraphStyle(
         "r_muted",
         fontName="Helvetica-Oblique",
-        fontSize=9,
+        fontSize=9.5,
         textColor=colors.HexColor("#666666"),
         spaceAfter=2,
         leading=12,
@@ -165,166 +159,123 @@ def _make_styles():
 # Section header widget (grey pill)
 # ─────────────────────────────────────────────
 
-def _section_header(title: str, style, page_width_pts: float):
-    """Return a grey-background Table row acting as a section pill header."""
-    cell = Paragraph(title, style)
-    tbl = Table([[cell]], colWidths=[page_width_pts - 40 * mm])
-    tbl.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#EEEEEE")),
-        ("LEFTPADDING",  (0, 0), (-1, -1), 6),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING",   (0, 0), (-1, -1), 3),
-        ("BOTTOMPADDING",(0, 0), (-1, -1), 3),
-        ("ROUNDEDCORNERS", [4, 4, 4, 4]),
-    ]))
-    return tbl
+def _section_header_line(title: str, style, page_width_pts: float):
+    """Return a section header with a blue line below it."""
+    elements = []
+    elements.append(Paragraph(title, style))
+    elements.append(HRFlowable(
+        width="100%",
+        thickness=1,
+        color=colors.HexColor("#1565C0"),
+        spaceBefore=1,
+        spaceAfter=4,
+        hAlign='LEFT'
+    ))
+    return elements
+
+
+class CircularImage(Flowable):
+    def __init__(self, path, size):
+        Flowable.__init__(self)
+        self.path = path
+        self.size = size
+        self.width = size
+        self.height = size
+
+    def draw(self):
+        self.canv.saveState()
+        # Create circular path
+        path = self.canv.beginPath()
+        path.circle(self.size/2, self.size/2, self.size/2)
+        self.canv.clipPath(path, stroke=0, fill=0)
+        self.canv.drawImage(self.path, 0, 0, self.size, self.size, preserveAspectRatio=True)
+        self.canv.restoreState()
 
 
 # ─────────────────────────────────────────────
 # Page 1 — Resume
 # ─────────────────────────────────────────────
 
-def _build_resume_story(student, S, page_width):
+def _build_resume_story(student, S, page_width, profile_pic_path=None):
     """Build ReportLab story elements for the resume page."""
     story = []
 
-    # ── Header: Name + contact row ───────────────
-    story.append(Paragraph(_safe(student.name, "Student"), S["r_name"]))
+    # ── Header: Name ───────────────
+    story.append(Paragraph(_safe(student.name, "Student").upper(), S["r_name"]))
 
+    # ── Contact Info ───────────────
     email_val = _safe(getattr(student, "email", None), "")
     phone_val = _safe(getattr(student, "phone", None), "")
-    contact_left  = " | ".join(x for x in [email_val, phone_val] if x and x != "—")
     li = getattr(student, "linkedin", "") or ""
     gh = getattr(student, "github", "") or ""
 
-    link_parts = []
-    if li:
-        link_parts.append(f'<link href="{li}"><u>LinkedIn</u></link>')
-    if gh:
-        link_parts.append(f'<link href="{gh}"><u>GitHub</u></link>')
-    contact_right = " | ".join(link_parts)
+    contact_parts = []
+    if email_val and email_val != "—": contact_parts.append(email_val)
+    if phone_val and phone_val != "—": contact_parts.append(phone_val)
+    if li: contact_parts.append(f'<link href="{li}">LinkedIn</link>')
+    if gh: contact_parts.append(f'<link href="{gh}">GitHub</link>')
+    contact_parts.append("India") # Hardcoded from image or omitted if not present
 
-    contact_row = Table(
-        [[Paragraph(contact_left, S["r_contact"]),
-          Paragraph(contact_right, S["r_contact_right"])]],
-        colWidths=[(page_width - 40*mm) * 0.55,
-                   (page_width - 40*mm) * 0.45],
-    )
-    contact_row.setStyle(TableStyle([
-        ("LEFTPADDING",  (0, 0), (-1, -1), 0),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING",   (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING",(0, 0), (-1, -1), 0),
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-    ]))
-    story.append(contact_row)
-    story.append(Spacer(1, 3 * mm))
+    contact_str = " | ".join(contact_parts)
+    story.append(Paragraph(contact_str, S["r_contact"]))
 
-    # ── EDUCATION ────────────────────────────────
-    story.append(_section_header("EDUCATION", S["r_section"], page_width))
-    story.append(Spacer(1, 2 * mm))
-
-    branch_val  = _safe(getattr(student, "branch", None))
-    year_val    = _safe(getattr(student, "grad_year", None))
-    cgpa        = _parse_cgpa(getattr(student, "semester_marks", "") or "")
-
-    edu_header = Table(
-        [[Paragraph("<b>GM University</b>", S["r_body"]),
-          Paragraph(f"Graduating {year_val}", S["r_muted"])]],
-        colWidths=[(page_width - 40*mm) * 0.65,
-                   (page_width - 40*mm) * 0.35],
-    )
-    edu_header.setStyle(TableStyle([
-        ("LEFTPADDING",  (0, 0), (-1, -1), 0),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-        ("TOPPADDING",   (0, 0), (-1, -1), 0),
-        ("BOTTOMPADDING",(0, 0), (-1, -1), 0),
-        ("ALIGN", (1, 0), (1, 0), "RIGHT"),
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-    ]))
-    story.append(edu_header)
-    story.append(Paragraph(f"• B.E. / B.Tech — {branch_val}", S["r_body"]))
-    story.append(Paragraph(f"• CGPA: {cgpa}", S["r_body"]))
-    story.append(Spacer(1, 3 * mm))
-
-    # ── PROJECTS ─────────────────────────────────
-    story.append(_section_header("PROJECTS", S["r_section"], page_width))
-    story.append(Spacer(1, 2 * mm))
-
-    for i, (title_attr, stack_attr, desc_attr) in enumerate([
-        ("proj1_title", "proj1_stack", "proj1_desc"),
-        ("proj2_title", "proj2_stack", "proj2_desc"),
-    ], 1):
-        title = _safe(getattr(student, title_attr, None), "")
-        stack = _safe(getattr(student, stack_attr, None), "")
-        desc  = _safe(getattr(student, desc_attr,  None), "")
-        if title and title != "—":
-            block = [
-                Paragraph(f"<b>{title}</b>", S["r_bold"]),
-            ]
-            if stack and stack != "—":
-                block.append(Paragraph(f"• Tech Stack: {stack}", S["r_body"]))
-            for line in _bullet_lines(desc):
-                block.append(Paragraph(f"• {line}", S["r_body"]))
-            block.append(Spacer(1, 2 * mm))
-            story.extend(block)
-
-    story.append(Spacer(1, 1 * mm))
+    # ── PROFESSIONAL SUMMARY ─────────────────────
+    summary_text = getattr(student, "interests", "") or ""
+    if summary_text:
+        story.extend(_section_header_line("PROFESSIONAL SUMMARY", S["r_section"], page_width))
+        story.append(Paragraph(summary_text, S["r_body"]))
+        story.append(Spacer(1, 2 * mm))
 
     # ── SKILLS ───────────────────────────────────
-    story.append(_section_header("SKILLS", S["r_section"], page_width))
-    story.append(Spacer(1, 2 * mm))
-
+    story.extend(_section_header_line("SKILLS", S["r_section"], page_width))
     langs  = _safe(getattr(student, "skills_languages", None), "")
     dev    = _safe(getattr(student, "skills_dev", None), "")
     other  = _safe(getattr(student, "skills_other", None), "")
 
     if langs and langs != "—":
-        story.append(Paragraph(f"• <b>Languages:</b> {langs}", S["r_body"]))
+        story.append(Paragraph(f"<b>Languages:</b> {langs}", S["r_body"]))
     if dev and dev != "—":
-        story.append(Paragraph(f"• <b>Web / Dev Tools:</b> {dev}", S["r_body"]))
-    for line in _bullet_lines(other):
-        story.append(Paragraph(f"• {line}", S["r_body"]))
-    story.append(Spacer(1, 3 * mm))
-
-    # ── ACHIEVEMENTS ─────────────────────────────
-    story.append(_section_header("ACHIEVEMENTS", S["r_section"], page_width))
+        story.append(Paragraph(f"<b>Frameworks & Tools:</b> {dev}", S["r_body"]))
+    if other and other != "—":
+        story.append(Paragraph(f"<b>Other Skills:</b> {other}", S["r_body"]))
     story.append(Spacer(1, 2 * mm))
 
-    for line in _bullet_lines(getattr(student, "achievements", "") or ""):
-        story.append(Paragraph(f"• {line}", S["r_body"]))
+    # ── EDUCATION ────────────────────────────────
+    story.extend(_section_header_line("EDUCATION", S["r_section"], page_width))
+    branch_val  = _safe(getattr(student, "branch", None))
+    year_val    = _safe(getattr(student, "grad_year", None))
+    cgpa        = _parse_cgpa(getattr(student, "semester_marks", "") or "")
+
+    story.append(Paragraph(f"<b>GM University</b> | Davangere, Karnataka, India", S["r_bold"]))
+    story.append(Paragraph(f"B.Tech in {branch_val} | Graduating {year_val} | CGPA: {cgpa}", S["r_body"]))
     story.append(Spacer(1, 3 * mm))
 
-    # ── INTERESTS (2-column table) ────────────────
-    story.append(_section_header("INTERESTS", S["r_section"], page_width))
-    story.append(Spacer(1, 2 * mm))
+    # ── PROJECTS ─────────────────────────────────
+    story.extend(_section_header_line("PROJECTS", S["r_section"], page_width))
+    for title_attr, stack_attr, desc_attr in [
+        ("proj1_title", "proj1_stack", "proj1_desc"),
+        ("proj2_title", "proj2_stack", "proj2_desc"),
+    ]:
+        title = _safe(getattr(student, title_attr, None), "")
+        stack = _safe(getattr(student, stack_attr, None), "")
+        desc  = _safe(getattr(student, desc_attr,  None), "")
+        if title and title != "—":
+            story.append(Paragraph(f"<b>{title}</b> | {stack}", S["r_bold"]))
+            for line in _bullet_lines(desc):
+                story.append(Paragraph(f"• {line}", S["r_body"]))
+            story.append(Spacer(1, 2 * mm))
 
-    interest_lines = _bullet_lines(getattr(student, "interests", "") or "")
-    if interest_lines:
-        mid = (len(interest_lines) + 1) // 2
-        col_a = interest_lines[:mid]
-        col_b = interest_lines[mid:]
+    # ── ACHIEVEMENTS & CERTIFICATIONS ─────────────
+    story.extend(_section_header_line("ACHIEVEMENTS & CERTIFICATIONS", S["r_section"], page_width))
+    
+    all_extra = []
+    cert_lines = _bullet_lines(getattr(student, "certifications", "") or "")
+    ach_lines  = _bullet_lines(getattr(student, "achievements", "") or "")
+    all_extra.extend(cert_lines)
+    all_extra.extend(ach_lines)
 
-        # Pad shorter column
-        while len(col_b) < len(col_a):
-            col_b.append("")
-
-        col_w = (page_width - 40 * mm) / 2
-        rows = []
-        for a, b in zip(col_a, col_b):
-            rows.append([
-                Paragraph(f"• {a}" if a else "", S["r_body"]),
-                Paragraph(f"• {b}" if b else "", S["r_body"]),
-            ])
-        int_tbl = Table(rows, colWidths=[col_w, col_w])
-        int_tbl.setStyle(TableStyle([
-            ("LEFTPADDING",  (0, 0), (-1, -1), 0),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-            ("TOPPADDING",   (0, 0), (-1, -1), 1),
-            ("BOTTOMPADDING",(0, 0), (-1, -1), 1),
-            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ]))
-        story.append(int_tbl)
+    for line in all_extra:
+        story.append(Paragraph(f"• {line}", S["r_body"]))
 
     return story
 
@@ -491,7 +442,7 @@ def _apply_qr_overlay(pdf_bytes: bytes, student, page_w, page_h) -> bytes:
 # Main entry point
 # ─────────────────────────────────────────────
 
-def generate_pdf(student, document_path: str = None) -> bytes:
+def generate_pdf(student, document_path: str = None, profile_pic_path: str = None) -> bytes:
     """
     Build a 2-page PDF:
       Page 1 — resume layout
@@ -515,7 +466,7 @@ def generate_pdf(student, document_path: str = None) -> bytes:
 
     # Build combined story
     story = []
-    story.extend(_build_resume_story(student, S, page_w))
+    story.extend(_build_resume_story(student, S, page_w, profile_pic_path=profile_pic_path))
     story.append(PageBreak())
     story.extend(_build_portfolio_story(student, S))
 
