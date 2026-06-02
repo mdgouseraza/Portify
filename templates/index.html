@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ProofFolio — Build Your Academic Portfolio</title>
+  <title>ProofFolio — GM University Academic Portfolio Generator</title>
   <meta name="description"
-    content="ProofFolio lets students build and download a professional academic portfolio PDF in seconds." />
+    content="ProofFolio by GM University lets students build and download a professional academic portfolio PDF in seconds." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -22,16 +22,16 @@
 
     :root {
       color-scheme: dark;
-      --bg: #0A0F1E;
-      --surface: #111827;
-      --surface2: #1E293B;
-      --border: #1E2D45;
-      --accent: #7C3AED;
-      --accent-light: #8B5CF6;
-      --accent-glow: rgba(124, 58, 237, 0.3);
-      --text: #E2E8F0;
-      --muted: #94A3B8;
-      --danger: #F87171;
+      --bg:           #0A0005;
+      --surface:      #150008;
+      --surface2:     #200010;
+      --border:       #3D0018;
+      --accent:       #6B0000;
+      --accent-light: #C9973A;
+      --accent-glow:  rgba(201, 151, 58, 0.25);
+      --text:         #F5EDD8;
+      --muted:        #B8956A;
+      --danger:       #FF6B6B;
     }
 
     html {
@@ -40,24 +40,14 @@
       scrollbar-color: var(--border) var(--bg);
     }
 
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg);
-    }
-
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 10px;
       border: 2px solid var(--bg);
     }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--muted);
-    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -65,8 +55,8 @@
       color: var(--text);
       min-height: 100vh;
       background-image:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124, 58, 237, 0.18) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 90% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(107, 0, 0, 0.22) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 90% 80%, rgba(201, 151, 58, 0.08) 0%, transparent 60%);
     }
 
     /* ── Navbar ── */
@@ -74,49 +64,87 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.2rem 2.5rem;
+      padding: 0.9rem 2.5rem;
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(10, 15, 30, 0.8);
+      background: rgba(10, 0, 5, 0.88);
     }
 
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .nav-gmu-logo {
+      height: 90px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+      border-radius: 8px;
+      filter: drop-shadow(0 4px 12px rgba(201, 151, 58, 0.3));
+    }
+
+    .nav-gmu-logo-fallback {
+      height: 68px;
+      width: 68px;
+      background: linear-gradient(135deg, #6B0000, #8B0000);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #C9973A;
+      flex-shrink: 0;
+      letter-spacing: -1px;
+    }
+
+    .nav-text-group { display: flex; flex-direction: column; gap: 0.1rem; }
+
     .nav-logo {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #A78BFA, #60A5FA);
+      background: linear-gradient(135deg, #C9973A, #F0C060);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -0.5px;
+      line-height: 1;
     }
 
-    .nav-logo a {
-      text-decoration: none;
-      color: inherit;
-    }
+    .nav-logo a { text-decoration: none; color: inherit; }
 
     .nav-tagline {
+      font-size: 0.72rem;
+      color: var(--accent-light);
+      font-weight: 500;
+      opacity: 0.85;
+    }
+
+    .nav-right {
       font-size: 0.78rem;
       color: var(--muted);
       font-weight: 400;
+      text-align: right;
     }
 
     /* ── Hero ── */
     .hero {
       text-align: center;
-      padding: 4.5rem 1.5rem 3rem;
+      padding: 4rem 1.5rem 2.5rem;
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      background: rgba(124, 58, 237, 0.15);
-      border: 1px solid rgba(124, 58, 237, 0.4);
-      color: #A78BFA;
+      background: rgba(107, 0, 0, 0.2);
+      border: 1px solid rgba(201, 151, 58, 0.4);
+      color: #C9973A;
       font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 0.08em;
@@ -131,7 +159,7 @@
       font-weight: 800;
       line-height: 1.1;
       letter-spacing: -1.5px;
-      background: linear-gradient(135deg, #E2E8F0 0%, #94A3B8 100%);
+      background: linear-gradient(135deg, #F5EDD8 0%, #B8956A 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -139,7 +167,7 @@
     }
 
     .hero h1 span {
-      background: linear-gradient(135deg, #A78BFA, #60A5FA);
+      background: linear-gradient(135deg, #C9973A, #F0C060);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -147,7 +175,7 @@
 
     .hero p {
       color: var(--muted);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       max-width: 500px;
       margin: 0 auto;
       line-height: 1.6;
@@ -155,7 +183,7 @@
 
     /* ── Form Card ── */
     .card-wrap {
-      max-width: 720px;
+      max-width: 740px;
       margin: 0 auto 5rem;
       padding: 0 1.5rem;
     }
@@ -164,10 +192,10 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 2.5rem 2.5rem;
+      padding: 2.5rem;
       box-shadow:
-        0 0 0 1px rgba(124, 58, 237, 0.06),
-        0 24px 60px rgba(0, 0, 0, 0.5);
+        0 0 0 1px rgba(201, 151, 58, 0.06),
+        0 24px 60px rgba(0, 0, 0, 0.6);
       position: relative;
       overflow: hidden;
     }
@@ -175,24 +203,22 @@
     .card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, #7C3AED, #3B82F6, #7C3AED);
+      background: linear-gradient(90deg, #6B0000, #C9973A, #6B0000);
       background-size: 200% auto;
       animation: shimmer 3s linear infinite;
     }
 
     @keyframes shimmer {
-      0% { background-position: 0% center; }
+      0%   { background-position: 0% center; }
       100% { background-position: 200% center; }
     }
 
     /* Flash messages */
     .flash {
-      background: rgba(248, 113, 113, 0.12);
-      border: 1px solid rgba(248, 113, 113, 0.35);
+      background: rgba(255, 107, 107, 0.12);
+      border: 1px solid rgba(255, 107, 107, 0.35);
       color: var(--danger);
       padding: 0.75rem 1rem;
       border-radius: 10px;
@@ -201,9 +227,7 @@
     }
 
     /* ── Progress Bar ── */
-    .progress-container {
-      margin-bottom: 2.5rem;
-    }
+    .progress-container { margin-bottom: 2.5rem; }
 
     .progress-bar-track {
       height: 6px;
@@ -230,9 +254,7 @@
       letter-spacing: 0.05em;
     }
 
-    .progress-step-text {
-      color: var(--accent-light);
-    }
+    .progress-step-text { color: var(--accent-light); }
 
     /* ── Wizard Steps ── */
     .form-step {
@@ -240,13 +262,11 @@
       animation: fadeIn 0.4s ease-out;
     }
 
-    .form-step.active {
-      display: block;
-    }
+    .form-step.active { display: block; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ── Form grid ── */
@@ -262,9 +282,7 @@
       gap: 0.45rem;
     }
 
-    .form-field.full {
-      grid-column: 1 / -1;
-    }
+    .form-field.full { grid-column: 1 / -1; }
 
     label {
       font-size: 0.78rem;
@@ -274,13 +292,11 @@
       text-transform: uppercase;
     }
 
-    label .req {
-      color: var(--accent-light);
-      margin-left: 2px;
-    }
+    label .req { color: var(--accent-light); margin-left: 2px; }
 
     input,
-    textarea {
+    textarea,
+    select {
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -295,14 +311,13 @@
     }
 
     input:focus,
-    textarea:focus {
+    textarea:focus,
+    select:focus {
       border-color: var(--accent-light);
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    textarea {
-      min-height: 90px;
-    }
+    textarea { min-height: 90px; }
 
     .error-msg {
       color: var(--danger);
@@ -311,15 +326,12 @@
       display: none;
     }
 
-    .field-error input, .field-error textarea {
-      border-color: var(--danger) !important;
-    }
+    .field-error input,
+    .field-error textarea { border-color: var(--danger) !important; }
 
-    .field-error .error-msg {
-      display: block;
-    }
+    .field-error .error-msg { display: block; }
 
-    /* File upload field */
+    /* ── File Upload ── */
     .file-upload-label {
       display: flex;
       align-items: center;
@@ -335,17 +347,12 @@
 
     .file-upload-label:hover {
       border-color: var(--accent-light);
-      background: rgba(124, 58, 237, 0.06);
+      background: rgba(201, 151, 58, 0.06);
     }
 
-    .file-upload-label input[type="file"] {
-      display: none;
-    }
+    .file-upload-label input[type="file"] { display: none; }
 
-    .file-upload-text {
-      font-size: 0.88rem;
-      color: var(--muted);
-    }
+    .file-upload-text { font-size: 0.88rem; color: var(--muted); }
 
     .file-upload-name {
       font-size: 0.82rem;
@@ -354,7 +361,7 @@
       word-break: break-all;
     }
 
-    /* Profile Pic Preview */
+    /* ── Profile Pic ── */
     .profile-preview-container {
       display: flex;
       flex-direction: column;
@@ -365,8 +372,7 @@
     }
 
     .profile-preview {
-      width: 100px;
-      height: 100px;
+      width: 100px; height: 100px;
       border-radius: 50%;
       background: var(--surface2);
       border: 2px solid var(--border);
@@ -377,18 +383,10 @@
       position: relative;
     }
 
-    .profile-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .profile-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-preview svg { width: 40px; height: 40px; color: var(--border); }
 
-    .profile-preview svg {
-      width: 40px;
-      height: 40px;
-      color: var(--border);
-    }
-
+    /* ── Section Divider ── */
     .section-divider {
       grid-column: 1 / -1;
       display: flex;
@@ -423,8 +421,8 @@
     .btn-nav {
       flex: 1;
       padding: 0.95rem 1.5rem;
-      background: linear-gradient(135deg, #7C3AED, #6D28D9);
-      color: #fff;
+      background: linear-gradient(135deg, #6B0000, #8B0000);
+      color: #F5EDD8;
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
       font-weight: 700;
@@ -433,7 +431,7 @@
       cursor: pointer;
       letter-spacing: 0.01em;
       transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
-      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.45);
+      box-shadow: 0 4px 20px rgba(201, 151, 58, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -441,9 +439,9 @@
     }
 
     .btn-nav:hover {
-      filter: brightness(1.12);
+      filter: brightness(1.15);
       transform: translateY(-1px);
-      box-shadow: 0 8px 28px rgba(124, 58, 237, 0.55);
+      box-shadow: 0 8px 28px rgba(201, 151, 58, 0.45);
     }
 
     .btn-nav.btn-back {
@@ -453,9 +451,182 @@
       box-shadow: none;
     }
 
-    .btn-nav.btn-back:hover {
-      background: var(--border);
+    .btn-nav.btn-back:hover { background: var(--border); }
+
+    /* ── Dynamic add buttons ── */
+    .btn-add-dynamic {
+      background: transparent;
+      border: 1.5px dashed var(--accent-light);
+      color: var(--accent-light);
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 0.4rem;
     }
+
+    .btn-add-dynamic:hover {
+      background: rgba(201, 151, 58, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* ── Certificate slot ── */
+    .cert-slot {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .cert-slot .file-upload-label { flex: 1; }
+
+    .btn-remove-slot {
+      background: transparent;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 1.15rem;
+      padding: 0.4rem;
+      flex-shrink: 0;
+      border-radius: 6px;
+      transition: background 0.15s;
+      line-height: 1;
+    }
+
+    .btn-remove-slot:hover { background: rgba(255, 107, 107, 0.12); }
+
+    /* ── Project block ── */
+    .project-block {
+      background: rgba(61, 0, 24, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.2rem 0.8rem;
+      margin-bottom: 1rem;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .project-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .project-block-header span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-light);
+    }
+
+    .btn-remove-project {
+      background: transparent;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-remove-project:hover { background: rgba(255, 107, 107, 0.12); }
+
+    .project-inner-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    /* ── Tag Pill system ── */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      min-height: 40px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.45rem 0.65rem;
+      transition: border-color 0.2s;
+    }
+
+    .tag-container.focused {
+      border-color: var(--accent-light);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .tag-container.empty::before {
+      content: 'No tags yet';
+      font-size: 0.82rem;
+      color: var(--border);
+      font-style: italic;
+      align-self: center;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(201, 151, 58, 0.15);
+      border: 1px solid rgba(201, 151, 58, 0.4);
+      color: #C9973A;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem 0.2rem 0.65rem;
+      border-radius: 999px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .tag-pill button {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 0;
+      line-height: 1;
+      opacity: 0.65;
+      transition: opacity 0.15s;
+    }
+
+    .tag-pill button:hover { opacity: 1; }
+
+    .tag-input-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag-input-row input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .btn-tag-add {
+      background: rgba(201, 151, 58, 0.15);
+      border: 1px solid rgba(201, 151, 58, 0.4);
+      color: #C9973A;
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .btn-tag-add:hover { background: rgba(201, 151, 58, 0.28); }
 
     /* ── Summary Card ── */
     .summary-card {
@@ -483,9 +654,7 @@
       gap: 0.2rem;
     }
 
-    .summary-item.full {
-      grid-column: 1 / -1;
-    }
+    .summary-item.full { grid-column: 1 / -1; }
 
     .summary-label {
       font-size: 0.65rem;
@@ -507,19 +676,23 @@
       text-align: center;
       font-size: 12px;
       color: grey;
-      opacity: 0.4;
+      opacity: 0.35;
       text-decoration: none;
       transition: opacity 0.2s;
       margin-top: 1.5rem;
     }
 
-    .discreet-link:hover { opacity: 1; }
+    .discreet-link:hover { opacity: 0.9; }
 
     /* ── Responsive ── */
-    @media (max-width: 540px) {
-      .form-grid, .summary-grid { grid-template-columns: 1fr; }
-      .card { padding: 1.8rem 1.3rem; }
+    @media (max-width: 560px) {
+      .form-grid,
+      .summary-grid,
+      .project-inner-grid { grid-template-columns: 1fr; }
+      .card { padding: 1.8rem 1.2rem; }
       .step-actions { flex-direction: column-reverse; }
+      nav { padding: 0.8rem 1.2rem; }
+      .nav-gmu-logo { height: 65px; }
     }
   </style>
 </head>
@@ -528,13 +701,27 @@
 
   <!-- Navbar -->
   <nav>
-    <span class="nav-logo"><a href="/">ProofFolio</a></span>
-    <span class="nav-tagline">GM University</span>
+    <div class="nav-brand">
+      <!-- GMU Logo — falls back to text badge if image can't load -->
+      <img
+        class="nav-gmu-logo"
+        src="/static/gmu-logo.png"
+        alt="GM University Logo"
+        id="gmuLogoImg"
+        onerror="this.style.display='none'; document.getElementById('gmuLogoBadge').style.display='flex';"
+      />
+      <div class="nav-gmu-logo-fallback" id="gmuLogoBadge" style="display:none;">GMU</div>
+      <div class="nav-text-group">
+        <div class="nav-logo"><a href="/">ProofFolio</a></div>
+        <div class="nav-tagline">GM University · Innovating Minds</div>
+      </div>
+    </div>
+    <div class="nav-right">Academic Portfolio<br>Generator</div>
   </nav>
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-badge">✦ Academic Portfolio Generator</div>
+    <div class="hero-badge">✦ GM University · Academic Portfolio Generator</div>
     <h1>Build your <span>academic</span> portfolio<br>in seconds.</h1>
     <p>Fill in your details below and instantly download a polished PDF portfolio.</p>
   </section>
@@ -560,281 +747,261 @@
         </div>
       </div>
 
-      <!-- Wizard Steps -->
-      <div id="wizardSteps">
-        
-        <!-- Step 1: Personal Info -->
-        <div class="form-step active" id="step1">
-          <div class="form-grid">
-            <div class="section-divider">
-              <span>Identity & Socials</span>
-              <hr>
-            </div>
-
-            <div class="profile-preview-container">
-              <div class="profile-preview" id="picPreview">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </div>
-              <label class="file-upload-label" style="max-width: 280px;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2">
-                  <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
-                </svg>
-                <div class="file-upload-text">Upload Profile Photo *</div>
-                <input id="profile_pic_input" type="file" accept=".jpg,.jpeg,.png" required />
-              </label>
-              <div class="error-msg" id="err-profile_pic">Please upload a profile picture (JPG/PNG).</div>
-            </div>
-
-            <div class="form-field">
-              <label for="name">Full Name <span class="req">*</span></label>
-              <input id="name_input" type="text" placeholder="e.g. Arjun Sharma" required />
-              <div class="error-msg" id="err-name">Full name is required.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="usn">USN <span class="req">*</span></label>
-              <input id="usn_input" type="text" placeholder="e.g. 1GM21CS042" required />
-              <div class="error-msg" id="err-usn">USN is required.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="branch">Branch <span class="req">*</span></label>
-              <input id="branch_input" type="text" placeholder="e.g. Computer Science" required />
-              <div class="error-msg" id="err-branch">Branch is required.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="grad_year">Graduation Year <span class="req">*</span></label>
-              <input id="grad_year_input" type="number" placeholder="e.g. 2025" min="2000" max="2040" required />
-              <div class="error-msg" id="err-grad_year">Graduation year is required.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="linkedin">LinkedIn URL <span class="req">*</span></label>
-              <input id="linkedin_input" type="url" placeholder="https://linkedin.com/in/..." required />
-              <div class="error-msg" id="err-linkedin">Valid LinkedIn URL is required.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="github">GitHub URL <span class="req">*</span></label>
-              <input id="github_input" type="url" placeholder="https://github.com/..." required />
-              <div class="error-msg" id="err-github">Valid GitHub URL is required.</div>
-            </div>
-
-            <div class="step-actions">
-              <button class="btn-nav" onclick="validateAndNext(1)">
-                Next: Academic Details
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 2: Academic Details -->
-        <div class="form-step" id="step2">
-          <div class="form-grid">
-            <div class="section-divider">
-              <span>Academics & Documents</span>
-              <hr>
-            </div>
-
-            <div class="form-field full">
-              <label for="semester_marks">Semester Marks <span class="req">*</span></label>
-              <textarea id="semester_marks_input" 
-                placeholder="Enter each semester on a new line&#10;e.g.&#10;Sem 1: 8.5, Sem 2: 9.0, CGPA: 8.75" required></textarea>
-              <div class="error-msg" id="err-semester_marks">Semester marks are required.</div>
-            </div>
-
-            <div class="form-field full">
-              <label for="certifications">Certifications <span class="req">*</span></label>
-              <textarea id="certifications_input" 
-                placeholder="List certifications, one per line&#10;e.g.&#10;AWS Certified Cloud Practitioner&#10;Google Data Analytics" required></textarea>
-              <div class="error-msg" id="err-certifications">Please list at least one certification or 'None'.</div>
-            </div>
-
-            <div class="form-field full">
-              <label for="achievements">Achievements <span class="req">*</span></label>
-              <textarea id="achievements_input" 
-                placeholder="List achievements, one per line&#10;e.g.&#10;Hackathon Winner — TechFest 2024&#10;Published research paper on ML" required></textarea>
-              <div class="error-msg" id="err-achievements">Achievements are required.</div>
-            </div>
-
-            <div class="form-field full">
-              <label>Upload Supporting Document (Optional)</label>
-              <label class="file-upload-label" for="document_input">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2">
-                  <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
-                </svg>
-                <div>
-                  <div class="file-upload-text" id="docStatusText">Click to choose a file (PDF/Image)…</div>
-                  <div class="file-upload-name" id="docFileNameText">No file selected</div>
-                </div>
-                <input id="document_input" type="file" accept=".pdf,.jpg,.jpeg,.png" />
-              </label>
-            </div>
-
-            <div class="step-actions">
-              <button class="btn-nav btn-back" onclick="goToStep(1)">Back</button>
-              <button class="btn-nav" onclick="validateAndNext(2)">Next: Projects & Skills</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 3: Projects & Skills -->
-        <div class="form-step" id="step3">
-          <div class="form-grid">
-            <div class="section-divider">
-              <span>Contact Info</span>
-              <hr>
-            </div>
-
-            <div class="form-field">
-              <label for="email">Email Address <span class="req">*</span></label>
-              <input id="email_input" type="email" placeholder="e.g. arjun@example.com" required />
-              <div class="error-msg" id="err-email">Valid email is required.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="phone">Phone Number <span class="req">*</span></label>
-              <input id="phone_input" type="tel" placeholder="e.g. +91 98765 43210" required />
-              <div class="error-msg" id="err-phone">Phone number is required.</div>
-            </div>
-
-            <div class="section-divider">
-              <span style="color:#60A5FA">Project 1</span>
-              <hr>
-            </div>
-
-            <div class="form-field">
-              <label for="proj1_title">Title <span class="req">*</span></label>
-              <input id="proj1_title_input" type="text" placeholder="Project Title" required />
-              <div class="error-msg" id="err-proj1_title">Project 1 title is required.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="proj1_stack">Tech Stack <span class="req">*</span></label>
-              <input id="proj1_stack_input" type="text" placeholder="e.g. React, Node.js" required />
-              <div class="error-msg" id="err-proj1_stack">Tech stack is required.</div>
-            </div>
-
-            <div class="form-field full">
-              <label for="proj1_desc">Description <span class="req">*</span></label>
-              <textarea id="proj1_desc_input" placeholder="What did you build?" required></textarea>
-              <div class="error-msg" id="err-proj1_desc">Project 1 description is required.</div>
-            </div>
-
-            <div class="section-divider">
-              <span style="color:#60A5FA">Project 2</span>
-              <hr>
-            </div>
-
-            <div class="form-field">
-              <label for="proj2_title">Title</label>
-              <input id="proj2_title_input" type="text" placeholder="Project Title" />
-            </div>
-
-            <div class="form-field">
-              <label for="proj2_stack">Tech Stack</label>
-              <input id="proj2_stack_input" type="text" placeholder="e.g. Python, SQL" />
-            </div>
-
-            <div class="form-field full">
-              <label for="proj2_desc">Description</label>
-              <textarea id="proj2_desc_input" placeholder="Description of project 2..."></textarea>
-            </div>
-
-            <div class="section-divider">
-              <span style="color:#60A5FA">Skills & Interests</span>
-              <hr>
-            </div>
-
-            <div class="form-field">
-              <label for="skills_languages">Languages <span class="req">*</span></label>
-              <input id="skills_languages_input" type="text" placeholder="e.g. C++, Java, Python" required />
-              <div class="error-msg" id="err-skills_languages">Languages are required.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="skills_dev">Web/Dev Tools <span class="req">*</span></label>
-              <input id="skills_dev_input" type="text" placeholder="e.g. Git, VS Code, Flask" required />
-              <div class="error-msg" id="err-skills_dev">Dev tools are required.</div>
-            </div>
-
-            <div class="form-field full">
-              <label for="skills_other">Other Skills</label>
-              <textarea id="skills_other_input" placeholder="e.g. UI Design, Communication"></textarea>
-            </div>
-
-            <div class="form-field full">
-              <label for="interests">Interests</label>
-              <textarea id="interests_input" placeholder="e.g. Chess, Open Source, Photography"></textarea>
-            </div>
-
-            <div class="step-actions">
-              <button class="btn-nav btn-back" onclick="goToStep(2)">Back</button>
-              <button class="btn-nav" onclick="validateAndNext(3)">Review & Preview</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 4: Preview -->
-        <div class="form-step" id="step4">
+      <!-- ══════════════ STEP 1: Personal Info ══════════════ -->
+      <div class="form-step active" id="step1">
+        <div class="form-grid">
           <div class="section-divider">
-            <span>Summary Preview</span>
-            <hr>
+            <span>Identity &amp; Socials</span><hr>
           </div>
 
-          <div class="summary-card" id="summaryView">
-            <!-- Populated by JS -->
+          <div class="profile-preview-container">
+            <div class="profile-preview" id="picPreview">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <label class="file-upload-label" style="max-width:280px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2">
+                <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+              </svg>
+              <div class="file-upload-text">Upload Profile Photo *</div>
+              <input id="profile_pic_input" type="file" accept=".jpg,.jpeg,.png" required />
+            </label>
+            <div class="error-msg" id="err-profile_pic">Please upload a profile picture (JPG/PNG).</div>
+          </div>
+
+          <div class="form-field">
+            <label for="name_input">Full Name <span class="req">*</span></label>
+            <input id="name_input" type="text" placeholder="e.g. Arjun Sharma" required />
+            <div class="error-msg" id="err-name">Full name is required.</div>
+          </div>
+
+          <div class="form-field">
+            <label for="usn_input">USN <span class="req">*</span></label>
+            <input id="usn_input" type="text" placeholder="e.g. 1GM21CS042" required />
+            <div class="error-msg" id="err-usn">USN is required.</div>
+          </div>
+
+          <div class="form-field">
+            <label for="branch_input">Branch <span class="req">*</span></label>
+            <input id="branch_input" type="text" placeholder="e.g. Computer Science" required />
+            <div class="error-msg" id="err-branch">Branch is required.</div>
+          </div>
+
+          <div class="form-field">
+            <label for="grad_year_input">Graduation Year <span class="req">*</span></label>
+            <input id="grad_year_input" type="number" placeholder="e.g. 2025" min="2000" max="2040" required />
+            <div class="error-msg" id="err-grad_year">Graduation year is required.</div>
+          </div>
+
+          <div class="form-field">
+            <label for="linkedin_input">LinkedIn URL <span class="req">*</span></label>
+            <input id="linkedin_input" type="url" placeholder="https://linkedin.com/in/..." required />
+            <div class="error-msg" id="err-linkedin">Valid LinkedIn URL is required.</div>
+          </div>
+
+          <div class="form-field">
+            <label for="github_input">GitHub URL <span class="req">*</span></label>
+            <input id="github_input" type="url" placeholder="https://github.com/..." required />
+            <div class="error-msg" id="err-github">Valid GitHub URL is required.</div>
           </div>
 
           <div class="step-actions">
-            <button class="btn-nav btn-back" onclick="goToStep(1)">Edit Details</button>
-            <button id="submitButton" class="btn-nav" onclick="submitWizard()">
-              Generate My Portfolio PDF
+            <button class="btn-nav" onclick="validateAndNext(1)">
+              Next: Academic Details
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+                <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </button>
           </div>
         </div>
+      </div>
 
+      <!-- ══════════════ STEP 2: Academic Details ══════════════ -->
+      <div class="form-step" id="step2">
+        <div class="form-grid">
+          <div class="section-divider">
+            <span>Academics &amp; Documents</span><hr>
+          </div>
+
+          <div class="form-field full">
+            <label for="semester_marks_input">Semester Marks <span class="req">*</span></label>
+            <textarea id="semester_marks_input"
+              placeholder="Enter each semester on a new line&#10;e.g.&#10;Sem 1: 8.5, Sem 2: 9.0, CGPA: 8.75" required></textarea>
+            <div class="error-msg" id="err-semester_marks">Semester marks are required.</div>
+          </div>
+
+          <div class="form-field full">
+            <label for="certifications_input">Certifications <span class="req">*</span></label>
+            <textarea id="certifications_input"
+              placeholder="List certifications, one per line&#10;e.g.&#10;AWS Certified Cloud Practitioner&#10;Google Data Analytics" required></textarea>
+            <div class="error-msg" id="err-certifications">Please list at least one certification or 'None'.</div>
+          </div>
+
+          <div class="form-field full">
+            <label for="achievements_input">Achievements <span class="req">*</span></label>
+            <textarea id="achievements_input"
+              placeholder="List achievements, one per line&#10;e.g.&#10;Hackathon Winner — TechFest 2024&#10;Published research paper on ML" required></textarea>
+            <div class="error-msg" id="err-achievements">Achievements are required.</div>
+          </div>
+
+          <!-- Dynamic Certificate / Proof Uploads -->
+          <div class="form-field full" id="certUploadsSection">
+            <label>
+              Certificates &amp; Proof of Work
+              <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;margin-left:0.3rem;">(PDF or image — starts with 3 slots)</span>
+            </label>
+            <div id="certSlotsList"></div>
+            <button type="button" id="addCertBtn" class="btn-add-dynamic" onclick="addCertSlot()">
+              + Add Certificate / Proof of Work
+            </button>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn-nav btn-back" onclick="goToStep(1)">Back</button>
+            <button class="btn-nav" onclick="validateAndNext(2)">Next: Projects &amp; Skills</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════ STEP 3: Projects & Skills ══════════════ -->
+      <div class="form-step" id="step3">
+        <div class="form-grid">
+
+          <!-- Contact -->
+          <div class="section-divider">
+            <span>Contact Info</span><hr>
+          </div>
+
+          <div class="form-field">
+            <label for="email_input">Email Address <span class="req">*</span></label>
+            <input id="email_input" type="email" placeholder="e.g. arjun@example.com" required />
+            <div class="error-msg" id="err-email">Valid email is required.</div>
+          </div>
+
+          <div class="form-field">
+            <label for="phone_input">Phone Number <span class="req">*</span></label>
+            <input id="phone_input" type="tel" placeholder="e.g. +91 98765 43210" required />
+            <div class="error-msg" id="err-phone">Phone number is required.</div>
+          </div>
+
+          <!-- Dynamic Projects -->
+          <div class="section-divider">
+            <span>Projects</span><hr>
+          </div>
+
+          <div id="projectsList" style="grid-column:1/-1;"></div>
+
+          <div style="grid-column:1/-1;">
+            <button type="button" class="btn-add-dynamic" onclick="addProject()">
+              + Add Another Project
+            </button>
+          </div>
+
+          <!-- Skills — Tag Pill Inputs -->
+          <div class="section-divider">
+            <span>Skills &amp; Interests</span><hr>
+          </div>
+
+          <!-- Languages -->
+          <div class="form-field full">
+            <label>Programming Languages <span class="req">*</span></label>
+            <div id="langTags" class="tag-container empty" onclick="document.getElementById('langTagInput').focus()"></div>
+            <div class="tag-input-row">
+              <input id="langTagInput" type="text" placeholder="Type a language and press Enter (e.g. Python)"
+                     onkeydown="handleTagKey(event,'lang')"
+                     onfocus="document.getElementById('langTags').classList.add('focused')"
+                     onblur="document.getElementById('langTags').classList.remove('focused')" />
+              <button type="button" class="btn-tag-add" onclick="addTag('lang')">+ Add</button>
+            </div>
+            <div class="error-msg" id="err-skills_languages">Add at least one programming language.</div>
+            <input type="hidden" id="skills_languages_input" />
+          </div>
+
+          <!-- Dev Tools -->
+          <div class="form-field full">
+            <label>Web / Dev Tools <span class="req">*</span></label>
+            <div id="devTags" class="tag-container empty" onclick="document.getElementById('devTagInput').focus()"></div>
+            <div class="tag-input-row">
+              <input id="devTagInput" type="text" placeholder="e.g. Git, VS Code, Flask"
+                     onkeydown="handleTagKey(event,'dev')"
+                     onfocus="document.getElementById('devTags').classList.add('focused')"
+                     onblur="document.getElementById('devTags').classList.remove('focused')" />
+              <button type="button" class="btn-tag-add" onclick="addTag('dev')">+ Add</button>
+            </div>
+            <div class="error-msg" id="err-skills_dev">Add at least one dev tool.</div>
+            <input type="hidden" id="skills_dev_input" />
+          </div>
+
+          <!-- Other Skills -->
+          <div class="form-field full">
+            <label>Other Skills <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;">(optional)</span></label>
+            <div id="otherTags" class="tag-container empty" onclick="document.getElementById('otherTagInput').focus()"></div>
+            <div class="tag-input-row">
+              <input id="otherTagInput" type="text" placeholder="e.g. UI Design, Machine Learning"
+                     onkeydown="handleTagKey(event,'other')"
+                     onfocus="document.getElementById('otherTags').classList.add('focused')"
+                     onblur="document.getElementById('otherTags').classList.remove('focused')" />
+              <button type="button" class="btn-tag-add" onclick="addTag('other')">+ Add</button>
+            </div>
+            <input type="hidden" id="skills_other_input" />
+          </div>
+
+          <!-- Interests -->
+          <div class="form-field full">
+            <label for="interests_input">Interests <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;">(optional)</span></label>
+            <textarea id="interests_input" placeholder="e.g. Chess, Open Source, Photography, Robotics"></textarea>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn-nav btn-back" onclick="goToStep(2)">Back</button>
+            <button class="btn-nav" onclick="validateAndNext(3)">Review &amp; Preview</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════ STEP 4: Preview & Submit ══════════════ -->
+      <div class="form-step" id="step4">
+        <div class="section-divider">
+          <span>Summary Preview</span><hr>
+        </div>
+
+        <div class="summary-card" id="summaryView">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="step-actions">
+          <button class="btn-nav btn-back" onclick="goToStep(1)">Edit Details</button>
+          <button id="submitButton" class="btn-nav" onclick="submitWizard()">
+            Generate My Portfolio PDF
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Hidden Form for Submission -->
-      <form id="submissionForm" method="POST" action="/" enctype="multipart/form-data" style="display:none;">
-      </form>
+      <form id="submissionForm" method="POST" action="/" enctype="multipart/form-data" style="display:none;"></form>
 
     </div>
     <a href="/professor/login" class="discreet-link">Professor Login</a>
   </div>
 
   <script>
+    // ══════════════════════════════════════════════
+    // Wizard state
+    // ══════════════════════════════════════════════
     let currentStep = 1;
-    const totalSteps = 4;
+    const TOTAL_STEPS = 4;
 
-    const steps = {
-      1: { title: "Personal Info", fields: ["name", "usn", "branch", "grad_year", "linkedin", "github"] },
-      2: { title: "Academic Details", fields: ["semester_marks", "certifications", "achievements"] },
-      3: { title: "Projects & Skills", fields: ["email", "phone", "proj1_title", "proj1_stack", "proj1_desc", "skills_languages", "skills_dev"] }
-    };
+    const STEP_TITLES = ["Personal Info", "Academic Details", "Projects & Skills", "Preview & Summary"];
 
     function updateProgress() {
-      const fill = document.getElementById('progressBarFill');
-      const text = document.getElementById('progressText');
-      const title = document.getElementById('stepTitle');
-      
-      const percentage = (currentStep / totalSteps) * 100;
-      fill.style.width = percentage + '%';
-      text.textContent = `Step ${currentStep} of ${totalSteps}`;
-      
-      const titles = ["Personal Info", "Academic Details", "Projects & Skills", "Preview & Summary"];
-      title.textContent = titles[currentStep - 1];
+      document.getElementById('progressBarFill').style.width = ((currentStep / TOTAL_STEPS) * 100) + '%';
+      document.getElementById('progressText').textContent   = `Step ${currentStep} of ${TOTAL_STEPS}`;
+      document.getElementById('stepTitle').textContent      = STEP_TITLES[currentStep - 1];
     }
 
     function goToStep(step) {
@@ -843,176 +1010,423 @@
       currentStep = step;
       updateProgress();
       if (step === 4) populateSummary();
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // ══════════════════════════════════════════════
+    // Validation
+    // ══════════════════════════════════════════════
+    const STEP_FIELDS = {
+      1: ["name", "usn", "branch", "grad_year", "linkedin", "github"],
+      2: ["semester_marks", "certifications", "achievements"],
+    };
+
     function validateAndNext(step) {
-      const config = steps[step];
       let isValid = true;
 
-      // Clear previous errors
-      config.fields.forEach(f => {
-        document.getElementById(`${f}_input`).parentElement.classList.remove('field-error');
-      });
-      if (step === 1) document.getElementById('picPreview').parentElement.classList.remove('field-error');
-
-      // Check fields
-      config.fields.forEach(f => {
-        const input = document.getElementById(`${f}_input`);
-        if (!input.value.trim()) {
-          input.parentElement.classList.add('field-error');
-          isValid = false;
-        } else if (input.type === 'url' && !input.value.startsWith('http')) {
-           input.parentElement.classList.add('field-error');
-           isValid = false;
-        }
-      });
-
-      // Special check for profile pic in step 1
       if (step === 1) {
+        // Clear previous errors
+        STEP_FIELDS[1].forEach(f => {
+          document.getElementById(`${f}_input`).parentElement.classList.remove('field-error');
+        });
+        document.getElementById('picPreview').parentElement.classList.remove('field-error');
+        document.getElementById('err-profile_pic').style.display = 'none';
+
+        STEP_FIELDS[1].forEach(f => {
+          const input = document.getElementById(`${f}_input`);
+          if (!input.value.trim() || (input.type === 'url' && !input.value.startsWith('http'))) {
+            input.parentElement.classList.add('field-error');
+            isValid = false;
+          }
+        });
+
         const picInput = document.getElementById('profile_pic_input');
         if (!picInput.files || picInput.files.length === 0) {
           document.getElementById('picPreview').parentElement.classList.add('field-error');
+          document.getElementById('err-profile_pic').style.display = 'block';
           isValid = false;
+        }
+      }
+
+      if (step === 2) {
+        STEP_FIELDS[2].forEach(f => {
+          const input = document.getElementById(`${f}_input`);
+          input.parentElement.classList.remove('field-error');
+          if (!input.value.trim()) {
+            input.parentElement.classList.add('field-error');
+            isValid = false;
+          }
+        });
+      }
+
+      if (step === 3) {
+        // Validate contact fields
+        ['email', 'phone'].forEach(f => {
+          const input = document.getElementById(`${f}_input`);
+          input.parentElement.classList.remove('field-error');
+          if (!input.value.trim()) {
+            input.parentElement.classList.add('field-error');
+            isValid = false;
+          }
+        });
+
+        // Validate Project 1
+        ['title', 'stack', 'desc'].forEach(field => {
+          const el = document.getElementById(`proj1_${field}_input`);
+          if (el) {
+            el.parentElement.classList.remove('field-error');
+            if (!el.value.trim()) {
+              el.parentElement.classList.add('field-error');
+              isValid = false;
+            }
+          }
+        });
+
+        // Validate skill tags
+        if (tagData.lang.length === 0) {
+          document.getElementById('langTags').style.borderColor = 'var(--danger)';
+          document.getElementById('err-skills_languages').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('langTags').style.borderColor = '';
+          document.getElementById('err-skills_languages').style.display = 'none';
+        }
+
+        if (tagData.dev.length === 0) {
+          document.getElementById('devTags').style.borderColor = 'var(--danger)';
+          document.getElementById('err-skills_dev').style.display = 'block';
+          isValid = false;
+        } else {
+          document.getElementById('devTags').style.borderColor = '';
+          document.getElementById('err-skills_dev').style.display = 'none';
         }
       }
 
       if (isValid) goToStep(step + 1);
     }
 
+    // ══════════════════════════════════════════════
+    // CERTIFICATE UPLOAD SLOTS
+    // ══════════════════════════════════════════════
+    let certSlotCount = 0;
+
+    function addCertSlot() {
+      certSlotCount++;
+      const id = certSlotCount;
+      const container = document.getElementById('certSlotsList');
+      const slot = document.createElement('div');
+      slot.id = `certSlot_${id}`;
+      slot.className = 'cert-slot';
+      slot.innerHTML = `
+        <label class="file-upload-label" for="cert_file_${id}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9973A" stroke-width="2">
+            <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+          </svg>
+          <div>
+            <div class="file-upload-text">Certificate / Proof ${id} — Click to choose (PDF / Image)</div>
+            <div class="file-upload-name" id="certFileName_${id}">No file selected</div>
+          </div>
+          <input id="cert_file_${id}" type="file" accept=".pdf,.jpg,.jpeg,.png"
+                 onchange="updateCertFileName(${id})" />
+        </label>
+        <button type="button" class="btn-remove-slot" onclick="removeCertSlot(${id})" title="Remove this slot">✕</button>
+      `;
+      container.appendChild(slot);
+    }
+
+    function removeCertSlot(id) {
+      const slot = document.getElementById(`certSlot_${id}`);
+      if (slot) slot.remove();
+    }
+
+    function updateCertFileName(id) {
+      const input  = document.getElementById(`cert_file_${id}`);
+      const nameEl = document.getElementById(`certFileName_${id}`);
+      nameEl.textContent = input.files[0] ? input.files[0].name : 'No file selected';
+    }
+
+    // ══════════════════════════════════════════════
+    // DYNAMIC PROJECTS
+    // ══════════════════════════════════════════════
+    let projectCount = 0;
+
+    function addProject() {
+      projectCount++;
+      const num = projectCount;
+      const isRequired = num === 1;
+      const container = document.getElementById('projectsList');
+
+      const block = document.createElement('div');
+      block.id = `projBlock_${num}`;
+      block.className = 'project-block';
+      block.innerHTML = `
+        <div class="project-block-header">
+          <span>Project ${num}${isRequired ? ' (Required)' : ' (Optional)'}</span>
+          ${!isRequired
+            ? `<button type="button" class="btn-remove-project" onclick="removeProject(${num})">✕ Remove</button>`
+            : ''}
+        </div>
+        <div class="project-inner-grid">
+          <div class="form-field">
+            <label>Title${isRequired ? ' <span class="req">*</span>' : ''}</label>
+            <input id="proj${num}_title_input" type="text" placeholder="Project Title" ${isRequired ? 'required' : ''} />
+            ${isRequired ? `<div class="error-msg" id="err-proj${num}_title">Project title is required.</div>` : ''}
+          </div>
+          <div class="form-field">
+            <label>Tech Stack${isRequired ? ' <span class="req">*</span>' : ''}</label>
+            <input id="proj${num}_stack_input" type="text" placeholder="e.g. React, Node.js, MongoDB" ${isRequired ? 'required' : ''} />
+            ${isRequired ? `<div class="error-msg" id="err-proj${num}_stack">Tech stack is required.</div>` : ''}
+          </div>
+          <div class="form-field" style="grid-column:1/-1;">
+            <label>Description${isRequired ? ' <span class="req">*</span>' : ''}</label>
+            <textarea id="proj${num}_desc_input" placeholder="What did you build? What problem does it solve?" ${isRequired ? 'required' : ''}></textarea>
+            ${isRequired ? `<div class="error-msg" id="err-proj${num}_desc">Project description is required.</div>` : ''}
+          </div>
+        </div>
+      `;
+      container.appendChild(block);
+    }
+
+    function removeProject(num) {
+      const block = document.getElementById(`projBlock_${num}`);
+      if (block) block.remove();
+    }
+
+    // ══════════════════════════════════════════════
+    // TAG PILL SKILLS
+    // ══════════════════════════════════════════════
+    const tagData = { lang: [], dev: [], other: [] };
+
+    const tagConfig = {
+      lang:  { containerId: 'langTags',  inputId: 'langTagInput',  hiddenId: 'skills_languages_input' },
+      dev:   { containerId: 'devTags',   inputId: 'devTagInput',   hiddenId: 'skills_dev_input' },
+      other: { containerId: 'otherTags', inputId: 'otherTagInput', hiddenId: 'skills_other_input' },
+    };
+
+    function addTag(type) {
+      const { containerId, inputId, hiddenId } = tagConfig[type];
+      const input = document.getElementById(inputId);
+      const val   = input.value.trim();
+      if (!val || tagData[type].includes(val)) { input.value = ''; return; }
+
+      tagData[type].push(val);
+      input.value = '';
+      renderTags(type);
+    }
+
+    function removeTag(type, val) {
+      tagData[type] = tagData[type].filter(t => t !== val);
+      renderTags(type);
+    }
+
+    function renderTags(type) {
+      const { containerId, hiddenId } = tagConfig[type];
+      const container = document.getElementById(containerId);
+
+      container.innerHTML = '';
+      if (tagData[type].length === 0) {
+        container.classList.add('empty');
+      } else {
+        container.classList.remove('empty');
+        tagData[type].forEach(t => {
+          const pill = document.createElement('span');
+          pill.className = 'tag-pill';
+          const escaped = t.replace(/'/g, "\\'");
+          pill.innerHTML = `${t} <button type="button" onclick="removeTag('${type}','${escaped}')">✕</button>`;
+          container.appendChild(pill);
+        });
+      }
+      document.getElementById(hiddenId).value = tagData[type].join(', ');
+    }
+
+    function handleTagKey(event, type) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        addTag(type);
+      }
+    }
+
+    // ══════════════════════════════════════════════
+    // SUMMARY POPULATE
+    // ══════════════════════════════════════════════
     function populateSummary() {
       const view = document.getElementById('summaryView');
-      
-      const sections = [
-        {
-          title: "Personal Information",
-          fields: [
-            { label: "Name", id: "name_input" },
-            { label: "USN", id: "usn_input" },
-            { label: "Branch", id: "branch_input" },
-            { label: "Graduation Year", id: "grad_year_input" },
-            { label: "LinkedIn", id: "linkedin_input" },
-            { label: "GitHub", id: "github_input" },
-            { label: "Email", id: "email_input" },
-            { label: "Phone", id: "phone_input" }
-          ]
-        },
-        {
-          title: "Academic Details",
-          fields: [
-            { label: "Semester Marks", id: "semester_marks_input", full: true },
-            { label: "Certifications", id: "certifications_input", full: true },
-            { label: "Achievements", id: "achievements_input", full: true }
-          ]
-        },
-        {
-          title: "Projects",
-          fields: [
-            { label: "Project 1 Title", id: "proj1_title_input" },
-            { label: "Project 1 Stack", id: "proj1_stack_input" },
-            { label: "Project 1 Description", id: "proj1_desc_input", full: true },
-            { label: "Project 2 Title", id: "proj2_title_input" },
-            { label: "Project 2 Stack", id: "proj2_stack_input" },
-            { label: "Project 2 Description", id: "proj2_desc_input", full: true }
-          ]
-        },
-        {
-          title: "Skills & Interests",
-          fields: [
-            { label: "Languages", id: "skills_languages_input" },
-            { label: "Web/Dev Tools", id: "skills_dev_input" },
-            { label: "Other Skills", id: "skills_other_input", full: true },
-            { label: "Interests", id: "interests_input", full: true }
-          ]
-        }
-      ];
-
       let html = '';
-      sections.forEach(section => {
+
+      // Personal Info
+      html += summarySection('Personal Information', [
+        { label: 'Name',            id: 'name_input' },
+        { label: 'USN',             id: 'usn_input' },
+        { label: 'Branch',          id: 'branch_input' },
+        { label: 'Graduation Year', id: 'grad_year_input' },
+        { label: 'LinkedIn',        id: 'linkedin_input' },
+        { label: 'GitHub',          id: 'github_input' },
+        { label: 'Email',           id: 'email_input' },
+        { label: 'Phone',           id: 'phone_input' },
+      ]);
+
+      // Academic
+      html += summarySection('Academic Details', [
+        { label: 'Semester Marks', id: 'semester_marks_input', full: true },
+        { label: 'Certifications', id: 'certifications_input', full: true },
+        { label: 'Achievements',   id: 'achievements_input',   full: true },
+      ]);
+
+      // Projects — gather dynamically
+      const projFields = [];
+      let pi = 1;
+      while (document.getElementById(`proj${pi}_title_input`) !== null) {
+        const title = document.getElementById(`proj${pi}_title_input`).value;
+        const stack = document.getElementById(`proj${pi}_stack_input`) ? document.getElementById(`proj${pi}_stack_input`).value : '';
+        const desc  = document.getElementById(`proj${pi}_desc_input`)  ? document.getElementById(`proj${pi}_desc_input`).value  : '';
+        if (title) {
+          projFields.push({ label: `Project ${pi} Title`, value: title });
+          projFields.push({ label: `Project ${pi} Stack`, value: stack });
+          projFields.push({ label: `Project ${pi} Desc`,  value: desc, full: true });
+        }
+        pi++;
+      }
+      if (projFields.length) {
         html += `<div class="summary-section">
-                   <div class="summary-label" style="color: var(--accent-light); margin-bottom: 1rem; font-size: 0.8rem;">${section.title}</div>
-                   <div class="summary-grid">`;
-        section.fields.forEach(field => {
-          const val = document.getElementById(field.id).value || "—";
-          html += `<div class="summary-item ${field.full ? 'full' : ''}">
-                    <span class="summary-label">${field.label}</span>
-                    <span class="summary-value">${val}</span>
-                  </div>`;
+          <div class="summary-label" style="color:var(--accent-light);margin-bottom:1rem;font-size:0.8rem;">Projects</div>
+          <div class="summary-grid">`;
+        projFields.forEach(f => {
+          html += `<div class="summary-item ${f.full ? 'full' : ''}">
+            <span class="summary-label">${f.label}</span>
+            <span class="summary-value">${f.value || '—'}</span>
+          </div>`;
         });
         html += `</div></div>`;
-      });
+      }
+
+      // Skills
+      html += `<div class="summary-section">
+        <div class="summary-label" style="color:var(--accent-light);margin-bottom:1rem;font-size:0.8rem;">Skills &amp; Interests</div>
+        <div class="summary-grid">
+          <div class="summary-item"><span class="summary-label">Languages</span><span class="summary-value">${tagData.lang.join(', ') || '—'}</span></div>
+          <div class="summary-item"><span class="summary-label">Dev Tools</span><span class="summary-value">${tagData.dev.join(', ') || '—'}</span></div>
+          <div class="summary-item full"><span class="summary-label">Other Skills</span><span class="summary-value">${tagData.other.join(', ') || '—'}</span></div>
+          <div class="summary-item full"><span class="summary-label">Interests</span><span class="summary-value">${document.getElementById('interests_input').value || '—'}</span></div>
+        </div>
+      </div>`;
+
       view.innerHTML = html;
     }
 
-    // Live preview for profile pic
-    document.getElementById('profile_pic_input').addEventListener('change', function(e) {
+    function summarySection(title, fields) {
+      let html = `<div class="summary-section">
+        <div class="summary-label" style="color:var(--accent-light);margin-bottom:1rem;font-size:0.8rem;">${title}</div>
+        <div class="summary-grid">`;
+      fields.forEach(f => {
+        const el  = document.getElementById(f.id);
+        const val = el ? (el.value || '—') : '—';
+        html += `<div class="summary-item ${f.full ? 'full' : ''}">
+          <span class="summary-label">${f.label}</span>
+          <span class="summary-value">${val}</span>
+        </div>`;
+      });
+      html += `</div></div>`;
+      return html;
+    }
+
+    // ══════════════════════════════════════════════
+    // SUBMIT WIZARD
+    // ══════════════════════════════════════════════
+    function submitWizard() {
+      const realForm = document.getElementById('submissionForm');
+      realForm.innerHTML = '';
+
+      const btn = document.getElementById('submitButton');
+      btn.textContent = 'Generating PDF…';
+      btn.disabled    = true;
+      btn.style.opacity = '0.7';
+
+      // ── Text fields ──────────────────────────────
+      const textFields = [
+        "name", "usn", "branch", "grad_year", "linkedin", "github",
+        "semester_marks", "certifications", "achievements",
+        "email", "phone",
+        "skills_languages", "skills_dev", "skills_other", "interests"
+      ];
+      textFields.forEach(id => {
+        const el = document.getElementById(`${id}_input`);
+        if (!el) return;
+        const h = document.createElement('input');
+        h.type  = 'hidden';
+        h.name  = id;
+        h.value = el.value;
+        realForm.appendChild(h);
+      });
+
+      // ── Dynamic projects ──────────────────────────
+      let pi = 1;
+      while (document.getElementById(`proj${pi}_title_input`) !== null) {
+        ['title', 'stack', 'desc'].forEach(field => {
+          const el = document.getElementById(`proj${pi}_${field}_input`);
+          if (!el) return;
+          const h = document.createElement('input');
+          h.type  = 'hidden';
+          h.name  = `proj${pi}_${field}`;
+          h.value = el.value;
+          realForm.appendChild(h);
+        });
+        pi++;
+      }
+
+      // ── Profile picture ───────────────────────────
+      const picInput = document.getElementById('profile_pic_input');
+      const picClone = picInput.cloneNode(true);
+      picClone.name  = 'profile_pic';
+      picInput.parentNode.replaceChild(picClone, picInput);
+      picInput.name  = 'profile_pic';
+      realForm.appendChild(picInput);
+
+      // ── Certificate files ─────────────────────────
+      const certSlots = document.querySelectorAll('#certSlotsList input[type="file"]');
+      certSlots.forEach(input => {
+        if (input.files && input.files.length > 0) {
+          const slotId = input.id.replace('cert_file_', '');
+          const clone  = input.cloneNode(true);
+          clone.name   = `cert_file_${slotId}`;
+          input.parentNode.replaceChild(clone, input);
+          input.name   = `cert_file_${slotId}`;
+          realForm.appendChild(input);
+        }
+      });
+
+      realForm.submit();
+    }
+
+    // ══════════════════════════════════════════════
+    // PROFILE PIC PREVIEW
+    // ══════════════════════════════════════════════
+    document.getElementById('profile_pic_input').addEventListener('change', function (e) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(event) {
-          document.getElementById('picPreview').innerHTML = `<img src="${event.target.result}" />`;
+        reader.onload = ev => {
+          document.getElementById('picPreview').innerHTML = `<img src="${ev.target.result}" />`;
         };
         reader.readAsDataURL(file);
       }
     });
 
-    // File name for document
-    document.getElementById('document_input').addEventListener('change', function(e) {
-      const name = e.target.files[0] ? e.target.files[0].name : "No file selected";
-      document.getElementById('docFileNameText').textContent = name;
+    // ══════════════════════════════════════════════
+    // INITIALISE ON LOAD
+    // ══════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+      // 3 certificate upload slots
+      addCertSlot();
+      addCertSlot();
+      addCertSlot();
+
+      // 1 required project
+      addProject();
+
+      // Init progress bar
+      updateProgress();
     });
-
-    function submitWizard() {
-      const realForm = document.getElementById('submissionForm');
-      realForm.innerHTML = ''; // clear
-
-      const btn = document.getElementById('submitButton');
-      btn.textContent = 'Generating PDF...';
-      btn.disabled = true;
-      btn.style.opacity = '0.7';
-
-      // Gather all inputs
-      const allInputs = [
-        "name", "usn", "branch", "grad_year", "linkedin", "github",
-        "semester_marks", "certifications", "achievements",
-        "email", "phone", "proj1_title", "proj1_stack", "proj1_desc",
-        "proj2_title", "proj2_stack", "proj2_desc",
-        "skills_languages", "skills_dev", "skills_other", "interests"
-      ];
-
-      allInputs.forEach(id => {
-        const val = document.getElementById(`${id}_input`).value;
-        const hidden = document.createElement('input');
-        hidden.type = 'hidden';
-        hidden.name = id;
-        hidden.value = val;
-        realForm.appendChild(hidden);
-      });
-
-      // Handle Files separately (move them to realForm)
-      const picInput = document.getElementById('profile_pic_input');
-      const docInput = document.getElementById('document_input');
-
-      // We clone the file inputs because they can't be value-copied
-      const picClone = picInput.cloneNode(true);
-      picClone.name = "profile_pic";
-      // To preserve the file selection, we move the original and replace it in the UI
-      picInput.parentNode.replaceChild(picClone, picInput);
-      realForm.appendChild(picInput);
-      picInput.name = "profile_pic";
-
-      if (docInput.files.length > 0) {
-        const docClone = docInput.cloneNode(true);
-        docClone.name = "document";
-        docInput.parentNode.replaceChild(docClone, docInput);
-        realForm.appendChild(docInput);
-        docInput.name = "document";
-      }
-
-      realForm.submit();
-    }
   </script>
 
 </body>
-
 </html>

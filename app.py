@@ -1,4 +1,5 @@
 import io
+import json
 import os
 
 from flask import (
@@ -47,19 +48,23 @@ class Student(db.Model):
     semester_marks = db.Column(db.Text)
     certifications = db.Column(db.Text)
     achievements = db.Column(db.Text)
-    # Resume fields
-    email           = db.Column(db.Text)
-    phone           = db.Column(db.Text)
-    proj1_title     = db.Column(db.Text)
-    proj1_stack     = db.Column(db.Text)
-    proj1_desc      = db.Column(db.Text)
-    proj2_title     = db.Column(db.Text)
-    proj2_stack     = db.Column(db.Text)
-    proj2_desc      = db.Column(db.Text)
-    skills_languages= db.Column(db.Text)
-    skills_dev      = db.Column(db.Text)
-    skills_other    = db.Column(db.Text)
-    interests       = db.Column(db.Text)
+    # Contact & resume fields
+    email            = db.Column(db.Text)
+    phone            = db.Column(db.Text)
+    # Legacy project columns (kept for backward compat)
+    proj1_title      = db.Column(db.Text)
+    proj1_stack      = db.Column(db.Text)
+    proj1_desc       = db.Column(db.Text)
+    proj2_title      = db.Column(db.Text)
+    proj2_stack      = db.Column(db.Text)
+    proj2_desc       = db.Column(db.Text)
+    # Dynamic projects stored as JSON
+    projects_json    = db.Column(db.Text)
+    # Skills
+    skills_languages = db.Column(db.Text)
+    skills_dev       = db.Column(db.Text)
+    skills_other     = db.Column(db.Text)
+    interests        = db.Column(db.Text)
 
 
 class Professor(db.Model):
@@ -87,6 +92,7 @@ def init_db():
         "email", "phone",
         "proj1_title", "proj1_stack", "proj1_desc",
         "proj2_title", "proj2_stack", "proj2_desc",
+        "projects_json",
         "skills_languages", "skills_dev", "skills_other",
         "interests",
     ]
@@ -118,47 +124,64 @@ def init_db():
 def index():
     if request.method == "POST":
         name = request.form.get("name", "").strip()
-        usn = request.form.get("usn", "").strip()
+        usn  = request.form.get("usn",  "").strip()
 
         if not name or not usn:
             flash("Name and USN are required.", "error")
             return render_template("index.html")
 
-        branch = request.form.get("branch", "").strip()
-        grad_year_raw = request.form.get("grad_year", "").strip()
-        grad_year = int(grad_year_raw) if grad_year_raw.isdigit() else None
-        linkedin = request.form.get("linkedin", "").strip()
-        github = request.form.get("github", "").strip()
+        branch         = request.form.get("branch",         "").strip()
+        grad_year_raw  = request.form.get("grad_year",      "").strip()
+        grad_year      = int(grad_year_raw) if grad_year_raw.isdigit() else None
+        linkedin       = request.form.get("linkedin",       "").strip()
+        github         = request.form.get("github",         "").strip()
         semester_marks = request.form.get("semester_marks", "").strip()
         certifications = request.form.get("certifications", "").strip()
-        achievements  = request.form.get("achievements",  "").strip()
-        # Resume fields
-        email            = request.form.get("email",            "").strip()
-        phone            = request.form.get("phone",            "").strip()
-        proj1_title      = request.form.get("proj1_title",      "").strip()
-        proj1_stack      = request.form.get("proj1_stack",      "").strip()
-        proj1_desc       = request.form.get("proj1_desc",       "").strip()
-        proj2_title      = request.form.get("proj2_title",      "").strip()
-        proj2_stack      = request.form.get("proj2_stack",      "").strip()
-        proj2_desc       = request.form.get("proj2_desc",       "").strip()
+        achievements   = request.form.get("achievements",   "").strip()
+        email          = request.form.get("email",          "").strip()
+        phone          = request.form.get("phone",          "").strip()
         skills_languages = request.form.get("skills_languages", "").strip()
         skills_dev       = request.form.get("skills_dev",       "").strip()
         skills_other     = request.form.get("skills_other",     "").strip()
         interests        = request.form.get("interests",        "").strip()
 
+        # ── Dynamic projects ──────────────────────────────────────────────
+        MAX_PROJECTS = 20
+        proj_data = {}
+        for i in range(1, MAX_PROJECTS + 1):
+            title = request.form.get(f"proj{i}_title", "").strip()
+            if not title:
+                break
+            proj_data[str(i)] = {
+                "title": title,
+                "stack": request.form.get(f"proj{i}_stack", "").strip(),
+                "desc":  request.form.get(f"proj{i}_desc",  "").strip(),
+            }
+
+        projects_json = json.dumps(proj_data) if proj_data else None
+
+        # Legacy proj1/proj2 mirror (professor dashboard may still display these)
+        proj1_title = proj_data.get("1", {}).get("title", "")
+        proj1_stack = proj_data.get("1", {}).get("stack", "")
+        proj1_desc  = proj_data.get("1", {}).get("desc",  "")
+        proj2_title = proj_data.get("2", {}).get("title", "")
+        proj2_stack = proj_data.get("2", {}).get("stack", "")
+        proj2_desc  = proj_data.get("2", {}).get("desc",  "")
+
         # Upsert: overwrite if USN exists
         student = Student.query.filter_by(usn=usn).first()
         if student:
-            student.name = name
-            student.branch = branch
-            student.grad_year = grad_year
-            student.linkedin = linkedin
-            student.github = github
-            student.semester_marks = semester_marks
-            student.certifications = certifications
-            student.achievements  = achievements
+            student.name             = name
+            student.branch           = branch
+            student.grad_year        = grad_year
+            student.linkedin         = linkedin
+            student.github           = github
+            student.semester_marks   = semester_marks
+            student.certifications   = certifications
+            student.achievements     = achievements
             student.email            = email
             student.phone            = phone
+            student.projects_json    = projects_json
             student.proj1_title      = proj1_title
             student.proj1_stack      = proj1_stack
             student.proj1_desc       = proj1_desc
@@ -177,6 +200,7 @@ def index():
                 certifications=certifications,
                 achievements=achievements,
                 email=email, phone=phone,
+                projects_json=projects_json,
                 proj1_title=proj1_title, proj1_stack=proj1_stack, proj1_desc=proj1_desc,
                 proj2_title=proj2_title, proj2_stack=proj2_stack, proj2_desc=proj2_desc,
                 skills_languages=skills_languages, skills_dev=skills_dev,
@@ -185,17 +209,23 @@ def index():
             db.session.add(student)
         db.session.commit()
 
-        # Handle optional document upload
-        doc_path = None
-        uploaded_file = request.files.get("document")
-        if uploaded_file and uploaded_file.filename:
-            orig_name = secure_filename(uploaded_file.filename)
-            ext = os.path.splitext(orig_name)[1].lower()
-            if ext in ALLOWED_EXTENSIONS:
-                doc_path = os.path.join(UPLOAD_DIR, f"{usn}_{orig_name}")
-                uploaded_file.save(doc_path)
+        # ── Handle multiple certificate/proof uploads ─────────────────────
+        cert_paths = []
+        i = 1
+        while True:
+            cert_file = request.files.get(f"cert_file_{i}")
+            if cert_file is None:
+                break
+            if cert_file and cert_file.filename:
+                orig_name = secure_filename(cert_file.filename)
+                ext = os.path.splitext(orig_name)[1].lower()
+                if ext in ALLOWED_EXTENSIONS:
+                    cert_save_path = os.path.join(UPLOAD_DIR, f"{usn}_cert{i}{ext}")
+                    cert_file.save(cert_save_path)
+                    cert_paths.append(cert_save_path)
+            i += 1
 
-        # Handle mandatory profile picture upload
+        # ── Handle mandatory profile picture ──────────────────────────────
         pic_path = None
         profile_pic = request.files.get("profile_pic")
         if profile_pic and profile_pic.filename:
@@ -205,12 +235,17 @@ def index():
                 pic_path = os.path.join(UPLOAD_DIR, f"{usn}_pic{ext}")
                 profile_pic.save(pic_path)
 
-        # Generate PDF and send as download
+        # ── Generate PDF and send as download ────────────────────────────
         try:
-            pdf_bytes = generate_pdf(student, document_path=doc_path, profile_pic_path=pic_path)
+            pdf_bytes = generate_pdf(
+                student,
+                cert_paths=cert_paths,
+                profile_pic_path=pic_path,
+            )
         finally:
-            if doc_path and os.path.exists(doc_path):
-                os.remove(doc_path)
+            for p in cert_paths:
+                if os.path.exists(p):
+                    os.remove(p)
             if pic_path and os.path.exists(pic_path):
                 os.remove(pic_path)
 
@@ -231,7 +266,7 @@ def index():
 @app.route("/professor/login", methods=["GET", "POST"])
 def professor_login():
     if request.method == "POST":
-        email = request.form.get("email", "").strip()
+        email    = request.form.get("email",    "").strip()
         password = request.form.get("password", "")
 
         prof = Professor.query.filter_by(email=email).first()
