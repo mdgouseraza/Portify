@@ -9,7 +9,8 @@
 ## ✨ Features
 
 ### 🎓 Student Flow (No Login Required)
-- Modern **4-step wizard** UI with dark glassmorphism design
+- Modern **4-step wizard** UI with dark glassmorphism design, featuring a live-looping **campus video background** (`campus.mp4`) in the hero section.
+- Premium **frosted glass header/navbar** with gold accents (`backdrop-filter`) that overlays seamlessly over the looping background video.
 - **Step 1 — Personal Info:** Full Name, USN, Branch, Graduation Year, LinkedIn, GitHub, Profile Picture upload (with live circular preview)
 - **Step 2 — Academic Details:** Semester Marks, Certifications, Achievements, optional Supporting Document upload
 - **Step 3 — Projects & Skills:** Email, Phone, 2 Projects (Title, Stack, Description), Skills (Languages, Frameworks, Other/AI-ML), Interests/Summary
@@ -47,7 +48,7 @@
 | PDF Engine | ReportLab (layout & drawing) + PyPDF2 (merging) |
 | QR Code | `qrcode[pil]` |
 | Auth | Werkzeug password hashing + Flask sessions |
-| Frontend | Vanilla HTML/CSS — glassmorphism, dark theme, zero external CSS frameworks |
+| Frontend | Vanilla HTML/CSS — glassmorphism, dark theme, zero external CSS frameworks, dynamic background video |
 
 ---
 
@@ -60,6 +61,9 @@ PBL/
 ├── requirements.txt
 ├── prooffolio.db           # SQLite database (auto-created on first run)
 ├── uploads/                # Temporary upload storage (auto-cleaned)
+├── static/
+│   ├── gmu-logo.png        # GM University Logo
+│   └── campus.mp4          # Hero background campus looping video
 └── templates/
     ├── index.html          # 4-step student wizard UI
     ├── professor_login.html
@@ -105,10 +109,10 @@ python app.py
 
 Once running, open your browser:
 
-| Portal | URL |
+| Portal | URL (Port 5000 / 5001) |
 |---|---|
-| **Student Portal** | http://127.0.0.1:5000/ |
-| **Professor Dashboard** | http://127.0.0.1:5000/professor/login |
+| **Student Portal** | http://127.0.0.1:5001/ or http://127.0.0.1:5000/ |
+| **Professor Dashboard** | http://127.0.0.1:5001/professor/login or http://127.0.0.1:5000/professor/login |
 
 ### Default Professor Credentials
 | Field | Value |

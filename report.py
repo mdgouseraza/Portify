@@ -520,7 +520,7 @@ def _apply_qr_overlay(pdf_bytes: bytes, student, page_w, page_h) -> bytes:
         qr_buf = io.BytesIO()
         c = rl_canvas.Canvas(qr_buf, pagesize=A4)
         qr_x = page_w - 115
-        qr_y = page_h - 115
+        qr_y = 30
         c.drawImage(tmp_png, qr_x, qr_y, width=85, height=85,
                     preserveAspectRatio=True, mask="auto")
         c.save()

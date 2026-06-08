@@ -7,6 +7,7 @@
   <title>ProofFolio — GM University Academic Portfolio Generator</title>
   <meta name="description"
     content="ProofFolio by GM University lets students build and download a professional academic portfolio PDF in seconds." />
+  <link rel="preload" as="video" href="{{ url_for('static', filename='campus.mp4') }}" type="video/mp4">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -22,16 +23,16 @@
 
     :root {
       color-scheme: dark;
-      --bg:           #0A0005;
-      --surface:      #150008;
-      --surface2:     #200010;
-      --border:       #3D0018;
-      --accent:       #6B0000;
+      --bg: #0A0005;
+      --surface: #150008;
+      --surface2: #200010;
+      --border: #3D0018;
+      --accent: #6B0000;
       --accent-light: #C9973A;
-      --accent-glow:  rgba(201, 151, 58, 0.25);
-      --text:         #F5EDD8;
-      --muted:        #B8956A;
-      --danger:       #FF6B6B;
+      --accent-glow: rgba(201, 151, 58, 0.25);
+      --text: #F5EDD8;
+      --muted: #B8956A;
+      --danger: #FF6B6B;
     }
 
     html {
@@ -40,37 +41,106 @@
       scrollbar-color: var(--border) var(--bg);
     }
 
-    ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
     ::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 10px;
       border: 2px solid var(--bg);
     }
-    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
 
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      background-image:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(107, 0, 0, 0.22) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 90% 80%, rgba(201, 151, 58, 0.08) 0%, transparent 60%);
     }
 
-    /* ── Navbar ── */
+    /* ── Top Announcement Bar ── */
+    .top-announcement-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 32px;
+      background: #D4AF37;
+      color: #1a0000;
+      font-size: 12px;
+      padding: 6px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 210;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .top-announcement-bar a {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .top-announcement-bar a:hover {
+      opacity: 0.8;
+    }
+
+    /* ── Navbar — Glassmorphism ── */
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.9rem 2.5rem;
-      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 2.5rem;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
       backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
+      -webkit-backdrop-filter: blur(12px);
+      position: fixed;
+      top: 32px;
+      left: 0;
+      width: 100%;
       z-index: 100;
-      background: rgba(10, 0, 5, 0.88);
+      background: rgba(80, 10, 10, 0.25);
+    }
+
+    /* ── Video Hero ── */
+    .video-hero {
+      position: relative;
+      overflow: hidden;
+      padding-top: 130px;
+    }
+
+    .video-hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .video-hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: rgba(10, 0, 0, 0.35);
+    }
+
+    .video-hero .hero {
+      position: relative;
+      z-index: 2;
+      padding: 4rem 1.5rem 2.5rem;
     }
 
     .nav-brand {
@@ -80,7 +150,7 @@
     }
 
     .nav-gmu-logo {
-      height: 90px;
+      height: 70px;
       width: auto;
       object-fit: contain;
       flex-shrink: 0;
@@ -89,40 +159,42 @@
     }
 
     .nav-gmu-logo-fallback {
-      height: 68px;
-      width: 68px;
+      height: 50px;
+      width: 50px;
       background: linear-gradient(135deg, #6B0000, #8B0000);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       font-weight: 900;
       color: #C9973A;
       flex-shrink: 0;
       letter-spacing: -1px;
     }
 
-    .nav-text-group { display: flex; flex-direction: column; gap: 0.1rem; }
+    .nav-text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
 
     .nav-logo {
       font-size: 1.25rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #C9973A, #F0C060);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
       letter-spacing: -0.5px;
       line-height: 1;
     }
 
-    .nav-logo a { text-decoration: none; color: inherit; }
+    .nav-logo a {
+      text-decoration: none;
+      color: #D4AF37;
+    }
 
     .nav-tagline {
       font-size: 0.72rem;
-      color: var(--accent-light);
+      color: rgba(245, 237, 216, 0.85);
       font-weight: 500;
-      opacity: 0.85;
     }
 
     .nav-right {
@@ -152,6 +224,7 @@
       padding: 0.35rem 0.9rem;
       border-radius: 999px;
       margin-bottom: 1.4rem;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
     }
 
     .hero h1 {
@@ -164,6 +237,8 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 1rem;
+      filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.8));
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
     }
 
     .hero h1 span {
@@ -174,11 +249,16 @@
     }
 
     .hero p {
-      color: var(--muted);
+      color: var(--text);
       font-size: 1.05rem;
       max-width: 500px;
       margin: 0 auto;
       line-height: 1.6;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-badge {
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
     }
 
     /* ── Form Card ── */
@@ -203,7 +283,9 @@
     .card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 3px;
       background: linear-gradient(90deg, #6B0000, #C9973A, #6B0000);
       background-size: 200% auto;
@@ -211,8 +293,13 @@
     }
 
     @keyframes shimmer {
-      0%   { background-position: 0% center; }
-      100% { background-position: 200% center; }
+      0% {
+        background-position: 0% center;
+      }
+
+      100% {
+        background-position: 200% center;
+      }
     }
 
     /* Flash messages */
@@ -227,7 +314,9 @@
     }
 
     /* ── Progress Bar ── */
-    .progress-container { margin-bottom: 2.5rem; }
+    .progress-container {
+      margin-bottom: 2.5rem;
+    }
 
     .progress-bar-track {
       height: 6px;
@@ -254,7 +343,9 @@
       letter-spacing: 0.05em;
     }
 
-    .progress-step-text { color: var(--accent-light); }
+    .progress-step-text {
+      color: var(--accent-light);
+    }
 
     /* ── Wizard Steps ── */
     .form-step {
@@ -262,11 +353,20 @@
       animation: fadeIn 0.4s ease-out;
     }
 
-    .form-step.active { display: block; }
+    .form-step.active {
+      display: block;
+    }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ── Form grid ── */
@@ -282,7 +382,9 @@
       gap: 0.45rem;
     }
 
-    .form-field.full { grid-column: 1 / -1; }
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
 
     label {
       font-size: 0.78rem;
@@ -292,7 +394,10 @@
       text-transform: uppercase;
     }
 
-    label .req { color: var(--accent-light); margin-left: 2px; }
+    label .req {
+      color: var(--accent-light);
+      margin-left: 2px;
+    }
 
     input,
     textarea,
@@ -317,7 +422,9 @@
       box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    textarea { min-height: 90px; }
+    textarea {
+      min-height: 90px;
+    }
 
     .error-msg {
       color: var(--danger);
@@ -327,9 +434,13 @@
     }
 
     .field-error input,
-    .field-error textarea { border-color: var(--danger) !important; }
+    .field-error textarea {
+      border-color: var(--danger) !important;
+    }
 
-    .field-error .error-msg { display: block; }
+    .field-error .error-msg {
+      display: block;
+    }
 
     /* ── File Upload ── */
     .file-upload-label {
@@ -350,9 +461,14 @@
       background: rgba(201, 151, 58, 0.06);
     }
 
-    .file-upload-label input[type="file"] { display: none; }
+    .file-upload-label input[type="file"] {
+      display: none;
+    }
 
-    .file-upload-text { font-size: 0.88rem; color: var(--muted); }
+    .file-upload-text {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
 
     .file-upload-name {
       font-size: 0.82rem;
@@ -372,7 +488,8 @@
     }
 
     .profile-preview {
-      width: 100px; height: 100px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       background: var(--surface2);
       border: 2px solid var(--border);
@@ -383,8 +500,17 @@
       position: relative;
     }
 
-    .profile-preview img { width: 100%; height: 100%; object-fit: cover; }
-    .profile-preview svg { width: 40px; height: 40px; color: var(--border); }
+    .profile-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-preview svg {
+      width: 40px;
+      height: 40px;
+      color: var(--border);
+    }
 
     /* ── Section Divider ── */
     .section-divider {
@@ -451,7 +577,9 @@
       box-shadow: none;
     }
 
-    .btn-nav.btn-back:hover { background: var(--border); }
+    .btn-nav.btn-back:hover {
+      background: var(--border);
+    }
 
     /* ── Dynamic add buttons ── */
     .btn-add-dynamic {
@@ -483,7 +611,9 @@
       animation: fadeIn 0.25s ease-out;
     }
 
-    .cert-slot .file-upload-label { flex: 1; }
+    .cert-slot .file-upload-label {
+      flex: 1;
+    }
 
     .btn-remove-slot {
       background: transparent;
@@ -498,7 +628,9 @@
       line-height: 1;
     }
 
-    .btn-remove-slot:hover { background: rgba(255, 107, 107, 0.12); }
+    .btn-remove-slot:hover {
+      background: rgba(255, 107, 107, 0.12);
+    }
 
     /* ── Project block ── */
     .project-block {
@@ -538,7 +670,9 @@
       transition: background 0.15s;
     }
 
-    .btn-remove-project:hover { background: rgba(255, 107, 107, 0.12); }
+    .btn-remove-project:hover {
+      background: rgba(255, 107, 107, 0.12);
+    }
 
     .project-inner-grid {
       display: grid;
@@ -598,7 +732,9 @@
       transition: opacity 0.15s;
     }
 
-    .tag-pill button:hover { opacity: 1; }
+    .tag-pill button:hover {
+      opacity: 1;
+    }
 
     .tag-input-row {
       display: flex;
@@ -626,7 +762,9 @@
       flex-shrink: 0;
     }
 
-    .btn-tag-add:hover { background: rgba(201, 151, 58, 0.28); }
+    .btn-tag-add:hover {
+      background: rgba(201, 151, 58, 0.28);
+    }
 
     /* ── Summary Card ── */
     .summary-card {
@@ -654,77 +792,201 @@
       gap: 0.2rem;
     }
 
-    .summary-item.full { grid-column: 1 / -1; }
+    .summary-item.full {
+      grid-column: 1 / -1;
+    }
 
     .summary-label {
       font-size: 0.65rem;
       font-weight: 700;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
 
-    .summary-value {
-      font-size: 0.93rem;
-      color: var(--text);
-      white-space: pre-wrap;
-    }
+      /* ── Footer ── */
+      footer {
+        background: #1a0000;
+        color: rgba(255, 255, 255, 0.6);
+        padding: 32px 48px;
+        border-top: 1px solid rgba(212, 175, 55, 0.15);
+        margin-top: 4rem;
+      }
 
-    /* ── Footer Link ── */
-    .discreet-link {
-      display: block;
-      text-align: center;
-      font-size: 12px;
-      color: grey;
-      opacity: 0.35;
-      text-decoration: none;
-      transition: opacity 0.2s;
-      margin-top: 1.5rem;
-    }
+      .footer-cols {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 2rem;
+        align-items: center;
+      }
 
-    .discreet-link:hover { opacity: 0.9; }
+      .footer-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
 
-    /* ── Responsive ── */
-    @media (max-width: 560px) {
-      .form-grid,
-      .summary-grid,
-      .project-inner-grid { grid-template-columns: 1fr; }
-      .card { padding: 1.8rem 1.2rem; }
-      .step-actions { flex-direction: column-reverse; }
-      nav { padding: 0.8rem 1.2rem; }
-      .nav-gmu-logo { height: 65px; }
-    }
+      .footer-col.col-left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .footer-logo {
+        height: 55px;
+        width: auto;
+        border-radius: 4px;
+        filter: drop-shadow(0 2px 8px rgba(201, 151, 58, 0.2));
+      }
+
+      .footer-brand {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #D4AF37;
+      }
+
+      .footer-tagline {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .footer-col.col-center {
+        text-align: center;
+        align-items: center;
+      }
+
+      .footer-col.col-center p {
+        font-size: 0.88rem;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .footer-col.col-center a {
+        color: #D4AF37;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.88rem;
+      }
+
+      .footer-col.col-center a:hover {
+        text-decoration: underline;
+      }
+
+      .footer-col.col-right {
+        align-items: flex-end;
+      }
+
+      .footer-link {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+      }
+
+      .footer-link:hover {
+        color: #D4AF37;
+      }
+
+      .footer-bottom {
+        max-width: 1200px;
+        margin: 2rem auto 0;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        text-align: center;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .footer-cols {
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 1.5rem;
+        }
+
+        .footer-col.col-left {
+          flex-direction: column;
+        }
+
+        .footer-col.col-right {
+          align-items: center;
+        }
+      }
+
+      @media (max-width: 560px) {
+
+        .form-grid,
+        .summary-grid,
+        .project-inner-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .card {
+          padding: 1.8rem 1.2rem;
+        }
+
+        .step-actions {
+          flex-direction: column-reverse;
+        }
+
+        nav {
+          top: 32px;
+          padding: 0.8rem 1.2rem;
+        }
+
+        .nav-gmu-logo {
+          height: 50px;
+        }
+
+        .video-hero {
+          padding-top: 110px;
+        }
+
+        .top-announcement-bar {
+          font-size: 9px;
+          padding: 0 12px;
+        }
+      }
   </style>
 </head>
 
 <body>
 
+  <!-- Top Announcement Bar -->
+  <div class="top-announcement-bar">
+    <span>Department of CS - Cloud Computing &amp; Business Systems · GM University</span>
+    <span>portify-u646.onrender.com</span>
+  </div>
+
   <!-- Navbar -->
   <nav>
     <div class="nav-brand">
       <!-- GMU Logo — falls back to text badge if image can't load -->
-      <img
-        class="nav-gmu-logo"
-        src="/static/gmu-logo.png"
-        alt="GM University Logo"
+      <img class="nav-gmu-logo" src="{{ url_for('static', filename='gmu-logo.png') }}" alt="GM University Logo"
         id="gmuLogoImg"
-        onerror="this.style.display='none'; document.getElementById('gmuLogoBadge').style.display='flex';"
-      />
+        onerror="this.style.display='none'; document.getElementById('gmuLogoBadge').style.display='flex';" />
       <div class="nav-gmu-logo-fallback" id="gmuLogoBadge" style="display:none;">GMU</div>
       <div class="nav-text-group">
         <div class="nav-logo"><a href="/">ProofFolio</a></div>
-        <div class="nav-tagline">GM University · Innovating Minds</div>
+        <div class="nav-tagline">GM University · CS - Cloud Computing</div>
       </div>
     </div>
     <div class="nav-right">Academic Portfolio<br>Generator</div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-badge">✦ GM University · Academic Portfolio Generator</div>
-    <h1>Build your <span>academic</span> portfolio<br>in seconds.</h1>
-    <p>Fill in your details below and instantly download a polished PDF portfolio.</p>
-  </section>
+  <!-- Video Hero -->
+  <div class="video-hero">
+    <video class="video-hero-bg" src="{{ url_for('static', filename='campus.mp4') }}" autoplay muted loop playsinline
+      preload="auto"></video>
+    <div class="video-hero-overlay"></div>
+
+    <section class="hero">
+      <div class="hero-badge">✦ GM University · Academic Portfolio Generator</div>
+      <h1>Build your <span>academic</span> portfolio<br>in seconds.</h1>
+      <p>Fill in your details below and instantly download a polished PDF portfolio.</p>
+    </section>
+  </div>
 
   <!-- Form Card -->
   <div class="card-wrap">
@@ -751,7 +1013,8 @@
       <div class="form-step active" id="step1">
         <div class="form-grid">
           <div class="section-divider">
-            <span>Identity &amp; Socials</span><hr>
+            <span>Identity &amp; Socials</span>
+            <hr>
           </div>
 
           <div class="profile-preview-container">
@@ -811,7 +1074,7 @@
             <button class="btn-nav" onclick="validateAndNext(1)">
               Next: Academic Details
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </button>
           </div>
@@ -822,27 +1085,31 @@
       <div class="form-step" id="step2">
         <div class="form-grid">
           <div class="section-divider">
-            <span>Academics &amp; Documents</span><hr>
+            <span>Academics &amp; Documents</span>
+            <hr>
           </div>
 
           <div class="form-field full">
             <label for="semester_marks_input">Semester Marks <span class="req">*</span></label>
             <textarea id="semester_marks_input"
-              placeholder="Enter each semester on a new line&#10;e.g.&#10;Sem 1: 8.5, Sem 2: 9.0, CGPA: 8.75" required></textarea>
+              placeholder="Enter each semester on a new line&#10;e.g.&#10;Sem 1: 8.5, Sem 2: 9.0, CGPA: 8.75"
+              required></textarea>
             <div class="error-msg" id="err-semester_marks">Semester marks are required.</div>
           </div>
 
           <div class="form-field full">
             <label for="certifications_input">Certifications <span class="req">*</span></label>
             <textarea id="certifications_input"
-              placeholder="List certifications, one per line&#10;e.g.&#10;AWS Certified Cloud Practitioner&#10;Google Data Analytics" required></textarea>
+              placeholder="List certifications, one per line&#10;e.g.&#10;AWS Certified Cloud Practitioner&#10;Google Data Analytics"
+              required></textarea>
             <div class="error-msg" id="err-certifications">Please list at least one certification or 'None'.</div>
           </div>
 
           <div class="form-field full">
             <label for="achievements_input">Achievements <span class="req">*</span></label>
             <textarea id="achievements_input"
-              placeholder="List achievements, one per line&#10;e.g.&#10;Hackathon Winner — TechFest 2024&#10;Published research paper on ML" required></textarea>
+              placeholder="List achievements, one per line&#10;e.g.&#10;Hackathon Winner — TechFest 2024&#10;Published research paper on ML"
+              required></textarea>
             <div class="error-msg" id="err-achievements">Achievements are required.</div>
           </div>
 
@@ -850,7 +1117,9 @@
           <div class="form-field full" id="certUploadsSection">
             <label>
               Certificates &amp; Proof of Work
-              <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;margin-left:0.3rem;">(PDF or image — starts with 3 slots)</span>
+              <span
+                style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;margin-left:0.3rem;">(PDF
+                or image — starts with 3 slots)</span>
             </label>
             <div id="certSlotsList"></div>
             <button type="button" id="addCertBtn" class="btn-add-dynamic" onclick="addCertSlot()">
@@ -871,7 +1140,8 @@
 
           <!-- Contact -->
           <div class="section-divider">
-            <span>Contact Info</span><hr>
+            <span>Contact Info</span>
+            <hr>
           </div>
 
           <div class="form-field">
@@ -888,7 +1158,8 @@
 
           <!-- Dynamic Projects -->
           <div class="section-divider">
-            <span>Projects</span><hr>
+            <span>Projects</span>
+            <hr>
           </div>
 
           <div id="projectsList" style="grid-column:1/-1;"></div>
@@ -901,18 +1172,20 @@
 
           <!-- Skills — Tag Pill Inputs -->
           <div class="section-divider">
-            <span>Skills &amp; Interests</span><hr>
+            <span>Skills &amp; Interests</span>
+            <hr>
           </div>
 
           <!-- Languages -->
           <div class="form-field full">
             <label>Programming Languages <span class="req">*</span></label>
-            <div id="langTags" class="tag-container empty" onclick="document.getElementById('langTagInput').focus()"></div>
+            <div id="langTags" class="tag-container empty" onclick="document.getElementById('langTagInput').focus()">
+            </div>
             <div class="tag-input-row">
               <input id="langTagInput" type="text" placeholder="Type a language and press Enter (e.g. Python)"
-                     onkeydown="handleTagKey(event,'lang')"
-                     onfocus="document.getElementById('langTags').classList.add('focused')"
-                     onblur="document.getElementById('langTags').classList.remove('focused')" />
+                onkeydown="handleTagKey(event,'lang')"
+                onfocus="document.getElementById('langTags').classList.add('focused')"
+                onblur="document.getElementById('langTags').classList.remove('focused')" />
               <button type="button" class="btn-tag-add" onclick="addTag('lang')">+ Add</button>
             </div>
             <div class="error-msg" id="err-skills_languages">Add at least one programming language.</div>
@@ -922,12 +1195,13 @@
           <!-- Dev Tools -->
           <div class="form-field full">
             <label>Web / Dev Tools <span class="req">*</span></label>
-            <div id="devTags" class="tag-container empty" onclick="document.getElementById('devTagInput').focus()"></div>
+            <div id="devTags" class="tag-container empty" onclick="document.getElementById('devTagInput').focus()">
+            </div>
             <div class="tag-input-row">
               <input id="devTagInput" type="text" placeholder="e.g. Git, VS Code, Flask"
-                     onkeydown="handleTagKey(event,'dev')"
-                     onfocus="document.getElementById('devTags').classList.add('focused')"
-                     onblur="document.getElementById('devTags').classList.remove('focused')" />
+                onkeydown="handleTagKey(event,'dev')"
+                onfocus="document.getElementById('devTags').classList.add('focused')"
+                onblur="document.getElementById('devTags').classList.remove('focused')" />
               <button type="button" class="btn-tag-add" onclick="addTag('dev')">+ Add</button>
             </div>
             <div class="error-msg" id="err-skills_dev">Add at least one dev tool.</div>
@@ -936,13 +1210,15 @@
 
           <!-- Other Skills -->
           <div class="form-field full">
-            <label>Other Skills <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;">(optional)</span></label>
-            <div id="otherTags" class="tag-container empty" onclick="document.getElementById('otherTagInput').focus()"></div>
+            <label>Other Skills <span
+                style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;">(optional)</span></label>
+            <div id="otherTags" class="tag-container empty" onclick="document.getElementById('otherTagInput').focus()">
+            </div>
             <div class="tag-input-row">
               <input id="otherTagInput" type="text" placeholder="e.g. UI Design, Machine Learning"
-                     onkeydown="handleTagKey(event,'other')"
-                     onfocus="document.getElementById('otherTags').classList.add('focused')"
-                     onblur="document.getElementById('otherTags').classList.remove('focused')" />
+                onkeydown="handleTagKey(event,'other')"
+                onfocus="document.getElementById('otherTags').classList.add('focused')"
+                onblur="document.getElementById('otherTags').classList.remove('focused')" />
               <button type="button" class="btn-tag-add" onclick="addTag('other')">+ Add</button>
             </div>
             <input type="hidden" id="skills_other_input" />
@@ -950,7 +1226,8 @@
 
           <!-- Interests -->
           <div class="form-field full">
-            <label for="interests_input">Interests <span style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;">(optional)</span></label>
+            <label for="interests_input">Interests <span
+                style="color:var(--muted);font-weight:400;text-transform:none;font-size:0.75rem;">(optional)</span></label>
             <textarea id="interests_input" placeholder="e.g. Chess, Open Source, Photography, Robotics"></textarea>
           </div>
 
@@ -964,7 +1241,8 @@
       <!-- ══════════════ STEP 4: Preview & Submit ══════════════ -->
       <div class="form-step" id="step4">
         <div class="section-divider">
-          <span>Summary Preview</span><hr>
+          <span>Summary Preview</span>
+          <hr>
         </div>
 
         <div class="summary-card" id="summaryView">
@@ -986,8 +1264,9 @@
       <form id="submissionForm" method="POST" action="/" enctype="multipart/form-data" style="display:none;"></form>
 
     </div>
-    <a href="/professor/login" class="discreet-link">Professor Login</a>
   </div>
+
+
 
   <script>
     // ══════════════════════════════════════════════
@@ -1000,8 +1279,8 @@
 
     function updateProgress() {
       document.getElementById('progressBarFill').style.width = ((currentStep / TOTAL_STEPS) * 100) + '%';
-      document.getElementById('progressText').textContent   = `Step ${currentStep} of ${TOTAL_STEPS}`;
-      document.getElementById('stepTitle').textContent      = STEP_TITLES[currentStep - 1];
+      document.getElementById('progressText').textContent = `Step ${currentStep} of ${TOTAL_STEPS}`;
+      document.getElementById('stepTitle').textContent = STEP_TITLES[currentStep - 1];
     }
 
     function goToStep(step) {
@@ -1140,7 +1419,7 @@
     }
 
     function updateCertFileName(id) {
-      const input  = document.getElementById(`cert_file_${id}`);
+      const input = document.getElementById(`cert_file_${id}`);
       const nameEl = document.getElementById(`certFileName_${id}`);
       nameEl.textContent = input.files[0] ? input.files[0].name : 'No file selected';
     }
@@ -1163,8 +1442,8 @@
         <div class="project-block-header">
           <span>Project ${num}${isRequired ? ' (Required)' : ' (Optional)'}</span>
           ${!isRequired
-            ? `<button type="button" class="btn-remove-project" onclick="removeProject(${num})">✕ Remove</button>`
-            : ''}
+          ? `<button type="button" class="btn-remove-project" onclick="removeProject(${num})">✕ Remove</button>`
+          : ''}
         </div>
         <div class="project-inner-grid">
           <div class="form-field">
@@ -1198,15 +1477,15 @@
     const tagData = { lang: [], dev: [], other: [] };
 
     const tagConfig = {
-      lang:  { containerId: 'langTags',  inputId: 'langTagInput',  hiddenId: 'skills_languages_input' },
-      dev:   { containerId: 'devTags',   inputId: 'devTagInput',   hiddenId: 'skills_dev_input' },
+      lang: { containerId: 'langTags', inputId: 'langTagInput', hiddenId: 'skills_languages_input' },
+      dev: { containerId: 'devTags', inputId: 'devTagInput', hiddenId: 'skills_dev_input' },
       other: { containerId: 'otherTags', inputId: 'otherTagInput', hiddenId: 'skills_other_input' },
     };
 
     function addTag(type) {
       const { containerId, inputId, hiddenId } = tagConfig[type];
       const input = document.getElementById(inputId);
-      const val   = input.value.trim();
+      const val = input.value.trim();
       if (!val || tagData[type].includes(val)) { input.value = ''; return; }
 
       tagData[type].push(val);
@@ -1255,21 +1534,21 @@
 
       // Personal Info
       html += summarySection('Personal Information', [
-        { label: 'Name',            id: 'name_input' },
-        { label: 'USN',             id: 'usn_input' },
-        { label: 'Branch',          id: 'branch_input' },
+        { label: 'Name', id: 'name_input' },
+        { label: 'USN', id: 'usn_input' },
+        { label: 'Branch', id: 'branch_input' },
         { label: 'Graduation Year', id: 'grad_year_input' },
-        { label: 'LinkedIn',        id: 'linkedin_input' },
-        { label: 'GitHub',          id: 'github_input' },
-        { label: 'Email',           id: 'email_input' },
-        { label: 'Phone',           id: 'phone_input' },
+        { label: 'LinkedIn', id: 'linkedin_input' },
+        { label: 'GitHub', id: 'github_input' },
+        { label: 'Email', id: 'email_input' },
+        { label: 'Phone', id: 'phone_input' },
       ]);
 
       // Academic
       html += summarySection('Academic Details', [
         { label: 'Semester Marks', id: 'semester_marks_input', full: true },
         { label: 'Certifications', id: 'certifications_input', full: true },
-        { label: 'Achievements',   id: 'achievements_input',   full: true },
+        { label: 'Achievements', id: 'achievements_input', full: true },
       ]);
 
       // Projects — gather dynamically
@@ -1278,11 +1557,11 @@
       while (document.getElementById(`proj${pi}_title_input`) !== null) {
         const title = document.getElementById(`proj${pi}_title_input`).value;
         const stack = document.getElementById(`proj${pi}_stack_input`) ? document.getElementById(`proj${pi}_stack_input`).value : '';
-        const desc  = document.getElementById(`proj${pi}_desc_input`)  ? document.getElementById(`proj${pi}_desc_input`).value  : '';
+        const desc = document.getElementById(`proj${pi}_desc_input`) ? document.getElementById(`proj${pi}_desc_input`).value : '';
         if (title) {
           projFields.push({ label: `Project ${pi} Title`, value: title });
           projFields.push({ label: `Project ${pi} Stack`, value: stack });
-          projFields.push({ label: `Project ${pi} Desc`,  value: desc, full: true });
+          projFields.push({ label: `Project ${pi} Desc`, value: desc, full: true });
         }
         pi++;
       }
@@ -1318,7 +1597,7 @@
         <div class="summary-label" style="color:var(--accent-light);margin-bottom:1rem;font-size:0.8rem;">${title}</div>
         <div class="summary-grid">`;
       fields.forEach(f => {
-        const el  = document.getElementById(f.id);
+        const el = document.getElementById(f.id);
         const val = el ? (el.value || '—') : '—';
         html += `<div class="summary-item ${f.full ? 'full' : ''}">
           <span class="summary-label">${f.label}</span>
@@ -1338,7 +1617,7 @@
 
       const btn = document.getElementById('submitButton');
       btn.textContent = 'Generating PDF…';
-      btn.disabled    = true;
+      btn.disabled = true;
       btn.style.opacity = '0.7';
 
       // ── Text fields ──────────────────────────────
@@ -1352,8 +1631,8 @@
         const el = document.getElementById(`${id}_input`);
         if (!el) return;
         const h = document.createElement('input');
-        h.type  = 'hidden';
-        h.name  = id;
+        h.type = 'hidden';
+        h.name = id;
         h.value = el.value;
         realForm.appendChild(h);
       });
@@ -1365,8 +1644,8 @@
           const el = document.getElementById(`proj${pi}_${field}_input`);
           if (!el) return;
           const h = document.createElement('input');
-          h.type  = 'hidden';
-          h.name  = `proj${pi}_${field}`;
+          h.type = 'hidden';
+          h.name = `proj${pi}_${field}`;
           h.value = el.value;
           realForm.appendChild(h);
         });
@@ -1376,9 +1655,9 @@
       // ── Profile picture ───────────────────────────
       const picInput = document.getElementById('profile_pic_input');
       const picClone = picInput.cloneNode(true);
-      picClone.name  = 'profile_pic';
+      picClone.name = 'profile_pic';
       picInput.parentNode.replaceChild(picClone, picInput);
-      picInput.name  = 'profile_pic';
+      picInput.name = 'profile_pic';
       realForm.appendChild(picInput);
 
       // ── Certificate files ─────────────────────────
@@ -1386,10 +1665,10 @@
       certSlots.forEach(input => {
         if (input.files && input.files.length > 0) {
           const slotId = input.id.replace('cert_file_', '');
-          const clone  = input.cloneNode(true);
-          clone.name   = `cert_file_${slotId}`;
+          const clone = input.cloneNode(true);
+          clone.name = `cert_file_${slotId}`;
           input.parentNode.replaceChild(clone, input);
-          input.name   = `cert_file_${slotId}`;
+          input.name = `cert_file_${slotId}`;
           realForm.appendChild(input);
         }
       });
@@ -1428,5 +1707,28 @@
     });
   </script>
 
+  <!-- Footer -->
+  <footer>
+    <div class="footer-cols">
+      <div class="footer-col col-left">
+        <img class="footer-logo" src="{{ url_for('static', filename='gmu-logo.png') }}" alt="GM University Logo" />
+        <div class="footer-brand">ProofFolio</div>
+        <div class="footer-tagline">GM University · CS - Cloud Computing</div>
+      </div>
+      <div class="footer-col col-center">
+        <p>Built with Python · Flask · ReportLab · SQLite</p>
+        <a href="https://portify-u646.onrender.com">portify-u646.onrender.com</a>
+      </div>
+      <div class="footer-col col-right">
+        <a href="/professor/login" class="footer-link">Professor Login</a>
+        <a href="https://github.com/mdgouseraza/Portify" class="footer-link">GitHub Repository ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 ProofFolio · GM University · Department of Cloud Computing
+    </div>
+  </footer>
+
 </body>
+
 </html>
